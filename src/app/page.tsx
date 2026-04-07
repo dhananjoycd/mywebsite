@@ -14,6 +14,7 @@ import {
 import { ClickRipple } from "@/components/click-ripple";
 import { ContactForm } from "@/components/contact-form";
 import { HeroOrbit } from "@/components/hero-orbit";
+import { HeroTyping } from "@/components/hero-typing";
 import { Reveal } from "@/components/reveal";
 import { ScrollBackground } from "@/components/scroll-background";
 import { SectionHeading } from "@/components/section-heading";
@@ -106,16 +107,23 @@ const blogPreview = [
 
 const profile = {
   name: "Dhananjoy Chandra Das",
-  role: "Mathematics Student & Full-Stack Developer",
-  availability: "Available for internships and freelance projects",
-  headline: "Building serious web experiences for real-world use",
+  role: "Mathematics Student & Full-Stack MERN Developer",
+  availability: "Open to internships, freelance work, and collaborative projects",
+  intro: "Hello! I'm a",
+  rotatingRoles: [
+    "Full-Stack Developer",
+    "Next.js Developer",
+    "Frontend Developer",
+    "React Developer",
+    "Responsive Web Designer",
+  ],
+  fixedTitle: "I develop clean, responsive, and modern websites for brands, businesses, and real-world needs.",
   resumeUrl: "https://drive.google.com/uc?export=download&id=14wDMPhN_NincwEaMl_3B3ikaeJ2Z9Ir1",
   bio:
-    "I design and build clean, responsive, and user-focused interfaces with Next.js, TypeScript, Tailwind CSS, and subtle motion that supports clarity instead of distraction.",
-  responseTime: "24h",
+    "I am Dhananjoy Chandra Das, a B.Sc. (Hons.) Mathematics student at the University of Rajshahi and a passionate developer who enjoys building structured, user-focused digital experiences with modern web technologies.",
+  responseTime: "Within 24 hours",
   experienceStartYear: 2023,
 };
-
 function SectionShell({
   id,
   children,
@@ -151,21 +159,27 @@ export default function Home() {
 
         <SectionShell id="home" className="pt-8 sm:pt-10">
           <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <Reveal className="flex flex-col items-center space-y-8 text-center">
+            <Reveal className="flex flex-col items-center space-y-8 text-center lg:items-start lg:text-left">
               <div className="space-y-5">
-                <h1 className="mx-auto max-w-3xl font-display text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
-                  {profile.name}
-                  <span className="mt-2 block text-cyan-300">{profile.headline}</span>
-                </h1>
-                <p className="mx-auto max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-                  {profile.bio}
-                </p>
                 <p className="text-sm uppercase tracking-[0.22em] text-cyan-200/80">
                   {profile.role}
                 </p>
+                <h1 className="mx-auto max-w-3xl font-display text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl lg:mx-0 lg:text-6xl">
+                  <span className="block text-slate-100">{profile.intro}</span>
+                  <HeroTyping
+                    items={profile.rotatingRoles}
+                    className="mt-3 block min-h-[1.2em] text-cyan-300"
+                  />
+                </h1>
+                <p className="mx-auto max-w-3xl text-lg font-medium leading-8 text-slate-100 lg:mx-0">
+                  {profile.fixedTitle}
+                </p>
+                <p className="mx-auto max-w-2xl text-base leading-8 text-slate-300 sm:text-lg lg:mx-0">
+                  {profile.bio}
+                </p>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
                 <Link href="#projects">
                   <Button size="lg">
                     View Projects
@@ -197,7 +211,7 @@ export default function Home() {
                 {profile.availability}
               </Link>
 
-              <div className="mx-auto grid max-w-2xl gap-4 sm:grid-cols-3">
+              <div className="mx-auto grid max-w-2xl gap-4 sm:grid-cols-3 lg:mx-0">
                 {heroStats.map(([value, label]) => (
                   <Card key={label} className="rounded-3xl px-5 py-4">
                     <p className="font-display text-2xl font-semibold text-white">{value}</p>
