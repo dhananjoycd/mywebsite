@@ -11,60 +11,64 @@ import {
   Telescope,
 } from "lucide-react";
 
+import { ClickRipple } from "@/components/click-ripple";
 import { ContactForm } from "@/components/contact-form";
 import { HeroOrbit } from "@/components/hero-orbit";
+import { Reveal } from "@/components/reveal";
+import { ScrollBackground } from "@/components/scroll-background";
 import { SectionHeading } from "@/components/section-heading";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-const navigation = [
-  "Home",
-  "About",
-  "Skills",
-  "Education",
-  "Experience",
-  "Projects",
-  "Research",
-  "Contact",
-  "Blog",
-];
-
 const skillGroups = [
   {
     title: "Frontend",
-    items: ["React", "Next.js 15", "TypeScript", "Tailwind CSS", "Shadcn UI"],
+    items: ["Next.js 15", "React", "TypeScript", "Tailwind CSS", "Shadcn UI"],
   },
   {
     title: "Motion",
-    items: ["Framer Motion", "GSAP", "Lenis", "Responsive UI"],
+    items: ["Framer Motion", "GSAP", "Lenis", "Micro interactions"],
   },
   {
     title: "Backend Ready",
     items: ["Nodemailer", "Route Handlers", "Server Actions", "API Design"],
   },
   {
-    title: "Tools",
-    items: ["Git & GitHub", "VS Code", "Figma", "Vercel"],
+    title: "Workflow",
+    items: ["Git & GitHub", "Responsive Design", "Performance", "Vercel"],
+  },
+];
+
+const experiences = [
+  {
+    title: "Mathematics Tutor",
+    period: "2023 - Present",
+    text: "Guiding students through calculus, algebra, and problem-solving with clarity, structure, and patience.",
+  },
+  {
+    title: "Independent Frontend Developer",
+    period: "Ongoing",
+    text: "Designing responsive product-style interfaces with accessible layouts, clean code, and polished motion.",
   },
 ];
 
 const projects = [
   {
     name: "TaskFlow",
-    description:
-      "A productivity dashboard for focused work sessions, priorities, and progress tracking.",
+    summary: "Productivity app focused on planning, priorities, and progress visibility.",
+    details: "Built with a structured dashboard mindset, clean information hierarchy, and fast-loading UI patterns.",
     stack: ["Next.js", "TypeScript", "Tailwind"],
   },
   {
     name: "CommerceHub",
-    description:
-      "An elegant e-commerce storefront with category filtering, featured items, and conversion-first UI.",
+    summary: "Modern storefront interface with conversion-aware sections and polished browsing experience.",
+    details: "Focused on real-world e-commerce layout patterns, mobile responsiveness, and user-friendly navigation.",
     stack: ["React", "Shadcn UI", "Framer Motion"],
   },
   {
     name: "BlogSphere",
-    description:
-      "A modern publishing experience with smooth transitions, highlighted articles, and readable typography.",
+    summary: "Readable publishing experience with balanced typography and smooth section flow.",
+    details: "Designed for future content expansion while keeping performance and clarity at the center.",
     stack: ["Next.js", "MDX", "GSAP"],
   },
 ];
@@ -72,397 +76,423 @@ const projects = [
 const researchItems = [
   {
     title: "Research Interests",
-    text: "Algorithms, optimization, machine learning, and system thinking that improves product decisions.",
+    text: "Algorithms, optimization, and systems thinking that influence practical product decisions.",
     icon: Telescope,
   },
   {
     title: "Current Focus",
-    text: "Building polished full-stack interfaces with strong UX, thoughtful performance, and accessible structure.",
+    text: "Building responsive interfaces that feel organized, readable, and production-ready across devices.",
     icon: Sparkles,
   },
   {
     title: "Future Goals",
-    text: "Contributing to impactful products, growing into scalable backend architecture, and open-source collaboration.",
+    text: "Growing into scalable backend architecture and contributing to real-world applications with measurable impact.",
     icon: MoveRight,
   },
 ];
 
-export default function Home() {
+const blogPreview = [
+  {
+    title: "How I Think About Responsive Portfolio Layouts",
+    description: "A practical breakdown of spacing, content hierarchy, and scroll behavior for clean portfolio experiences.",
+    meta: "Design Systems | 4 min read",
+  },
+  {
+    title: "Building Motion That Supports UX Instead of Distracting From It",
+    description: "Using subtle transitions, hover states, and reveal timing to make interfaces feel polished and intentional.",
+    meta: "Frontend | 6 min read",
+  },
+];
+
+const profile = {
+  name: "Dhananjoy Chandra Das",
+  role: "Mathematics Student & Full-Stack Developer",
+  availability: "Available for internships and freelance projects",
+  headline: "Building serious web experiences for real-world use",
+  resumeUrl: "https://drive.google.com/uc?export=download&id=14wDMPhN_NincwEaMl_3B3ikaeJ2Z9Ir1",
+  bio:
+    "I design and build clean, responsive, and user-focused interfaces with Next.js, TypeScript, Tailwind CSS, and subtle motion that supports clarity instead of distraction.",
+  responseTime: "24h",
+  experienceStartYear: 2023,
+};
+
+function SectionShell({
+  id,
+  children,
+  className = "",
+}: {
+  id: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <main className="relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(37,99,235,0.18),transparent_38%),radial-gradient(circle_at_20%_30%,rgba(34,211,238,0.08),transparent_26%),linear-gradient(180deg,#050b19_0%,#030816_100%)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
+    <section id={id} className={`scroll-mt-28 py-16 sm:py-20 lg:py-24 ${className}`}>
+      {children}
+    </section>
+  );
+}
 
-      <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-4 sm:px-6 lg:px-8">
-        <header className="sticky top-4 z-40 mb-8 rounded-full border border-white/8 bg-slate-950/70 px-4 py-3 backdrop-blur-xl">
-          <div className="flex items-center justify-between gap-4">
-            <Link href="#home" className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-400/15 text-cyan-300 shadow-[0_0_30px_rgba(34,211,238,0.2)]">
-                <Sparkles className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="font-display text-sm font-semibold tracking-wide text-white">
-                  Your Name
+export default function Home() {
+  const currentYear = new Date().getFullYear();
+  const yearsExperience = Math.max(1, currentYear - profile.experienceStartYear + 1);
+  const heroStats = [
+    [String(projects.length), "Featured Projects"],
+    [`${yearsExperience}+`, "Years Practice"],
+    [profile.responseTime, "Typical Reply Time"],
+  ] as const;
+
+  return (
+    <main className="relative min-h-screen overflow-hidden bg-[linear-gradient(180deg,#050b19_0%,#030816_100%)]">
+      <ScrollBackground variant="home" />
+      <ClickRipple />
+
+
+      <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-28 sm:px-6 sm:pt-32 lg:px-8">
+
+        <SectionShell id="home" className="pt-8 sm:pt-10">
+          <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <Reveal className="flex flex-col items-center space-y-8 text-center">
+              <div className="space-y-5">
+                <h1 className="mx-auto max-w-3xl font-display text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+                  {profile.name}
+                  <span className="mt-2 block text-cyan-300">{profile.headline}</span>
+                </h1>
+                <p className="mx-auto max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
+                  {profile.bio}
                 </p>
-                <p className="text-xs text-slate-400">Full-Stack Developer</p>
+                <p className="text-sm uppercase tracking-[0.22em] text-cyan-200/80">
+                  {profile.role}
+                </p>
               </div>
-            </Link>
 
-            <nav className="hidden items-center gap-5 lg:flex">
-              {navigation.map((item) => (
-                <Link
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="text-sm text-slate-300 transition hover:text-cyan-300"
-                >
-                  {item}
+              <div className="flex flex-wrap justify-center gap-3">
+                <Link href="#projects">
+                  <Button size="lg">
+                    View Projects
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
                 </Link>
-              ))}
-            </nav>
+                <a
+                  href={profile.resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 text-sm font-semibold text-slate-100 transition-all duration-500 ease-out hover:-translate-y-1 hover:border-cyan-400/30 hover:bg-white/10 hover:shadow-[0_12px_28px_rgba(2,6,23,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80"
+                >
+                  Download Resume
+                  <Download className="h-4 w-4" />
+                </a>
+                <Link href="/blog">
+                  <Button variant="secondary" size="lg">
+                    Visit Blog
+                    <BookOpen className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
 
-            <Button variant="secondary" className="hidden sm:inline-flex">
-              Resume
-              <Download className="h-4 w-4" />
-            </Button>
+              <Link
+                href="#contact"
+                className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm text-emerald-300 transition hover:border-emerald-300/35 hover:bg-emerald-400/16"
+              >
+                <span className="h-2 w-2 rounded-full bg-emerald-300" />
+                {profile.availability}
+              </Link>
+
+              <div className="mx-auto grid max-w-2xl gap-4 sm:grid-cols-3">
+                {heroStats.map(([value, label]) => (
+                  <Card key={label} className="rounded-3xl px-5 py-4">
+                    <p className="font-display text-2xl font-semibold text-white">{value}</p>
+                    <p className="mt-1 text-sm text-slate-400">{label}</p>
+                  </Card>
+                ))}
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.12}>
+              <HeroOrbit />
+            </Reveal>
           </div>
-        </header>
+        </SectionShell>
 
-        <section
-          id="home"
-          className="grid gap-12 py-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center"
-        >
-          <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm text-emerald-300">
-              <span className="h-2 w-2 rounded-full bg-emerald-300" />
-              Hi, I&apos;m available for internships and freelance work
-            </div>
+        <SectionShell id="about">
+          <Reveal>
+            <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+              <Card className="p-6 sm:p-8">
+                <SectionHeading
+                  eyebrow="About"
+                  title="Organized thinking, product-minded execution"
+                  description="I enjoy turning ideas into structured digital experiences that feel clean, fast, and easy to use on any device."
+                />
+                <p className="mt-6 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
+                  My mathematics background helps me think carefully about logic, systems,
+                  and problem solving. In frontend work, that translates into thoughtful
+                  layout decisions, readable content flow, and interfaces that feel stable
+                  instead of noisy.
+                </p>
+              </Card>
 
-            <div className="space-y-6">
-              <h1 className="max-w-3xl font-display text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
-                A Mathematics Student &amp;
-                <span className="block bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 bg-clip-text text-transparent">
-                  Full-Stack Web Developer
-                </span>
-              </h1>
-              <p className="max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-                I build clean, scalable, and user-focused web experiences with
-                Next.js 15, TypeScript, Tailwind CSS, expressive motion, and a
-                strong eye for usability.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              <Button size="lg">
-                View Projects
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-              <Button variant="secondary" size="lg">
-                Download Resume
-                <Download className="h-4 w-4" />
-              </Button>
-              <Button variant="secondary" size="lg">
-                Visit Blog
-                <BookOpen className="h-4 w-4" />
-              </Button>
-            </div>
-
-            <div className="grid max-w-2xl gap-4 sm:grid-cols-3">
-              {[
-                ["2+", "Live Projects"],
-                ["5+", "Core Technologies"],
-                ["100%", "Dedication"],
-              ].map(([value, label]) => (
-                <Card key={label} className="rounded-3xl px-5 py-4">
-                  <p className="font-display text-2xl font-semibold text-white">
-                    {value}
+              <Card className="grid gap-5 p-6 sm:grid-cols-2 sm:p-8">
+                <div className="rounded-3xl border border-white/8 bg-slate-950/35 p-5">
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Focus</p>
+                  <p className="mt-3 text-base leading-7 text-slate-200">
+                    Responsive interfaces, strong section hierarchy, accessible layouts, and recruiter-friendly presentation.
                   </p>
-                  <p className="mt-1 text-sm text-slate-400">{label}</p>
-                </Card>
-              ))}
+                </div>
+                <div className="rounded-3xl border border-white/8 bg-slate-950/35 p-5">
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Approach</p>
+                  <p className="mt-3 text-base leading-7 text-slate-200">
+                    Keep the structure clear, the visuals disciplined, and the interactions subtle enough to support trust.
+                  </p>
+                </div>
+              </Card>
             </div>
-          </div>
+          </Reveal>
+        </SectionShell>
 
-          <HeroOrbit />
-        </section>
-
-        <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <Card id="about" className="p-6 sm:p-8">
-            <SectionHeading
-              eyebrow="About Me"
-              title="Problem-solving mindset with product-focused execution"
-              description="I enjoy turning ideas into practical digital products. My mathematics background helps me reason carefully, while web development lets me ship elegant, real-world solutions."
-            />
-            <p className="mt-6 text-sm leading-7 text-slate-300">
-              I love building responsive interfaces, structured systems, and
-              modern user journeys that feel smooth on every device. My focus
-              is simple: make the experience clear, fast, and useful.
-            </p>
-          </Card>
-
-          <Card id="skills" className="p-6 sm:p-8">
+        <SectionShell id="skills">
+          <Reveal>
             <SectionHeading
               eyebrow="Skills"
-              title="A modern stack for premium portfolio experiences"
-              description="Built around your chosen tools so the site feels polished today and stays extendable later."
+              title="A modern stack with room to scale"
+              description="Built around your chosen tools, while keeping the architecture clean enough for future backend growth."
             />
-            <div className="mt-8 grid gap-5 md:grid-cols-2">
-              {skillGroups.map((group) => (
-                <div
-                  key={group.title}
-                  className="rounded-3xl border border-white/8 bg-slate-950/45 p-5"
-                >
-                  <h3 className="font-display text-lg font-medium text-white">
-                    {group.title}
-                  </h3>
+          </Reveal>
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {skillGroups.map((group, index) => (
+              <Reveal key={group.title} delay={index * 0.05}>
+                <Card className="h-full p-6">
+                  <h3 className="font-display text-lg font-medium text-white">{group.title}</h3>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {group.items.map((item) => (
                       <span
                         key={item}
-                        className="rounded-full border border-cyan-400/15 bg-cyan-400/10 px-3 py-1.5 text-xs font-medium text-cyan-100"
+                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200"
                       >
                         {item}
                       </span>
                     ))}
                   </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </section>
+                </Card>
+              </Reveal>
+            ))}
+          </div>
+        </SectionShell>
 
-        <section className="mt-6 grid gap-6 lg:grid-cols-[0.75fr_1fr_0.85fr]">
-          <Card id="education" className="p-6">
-            <SectionHeading eyebrow="Education" title="Academic Background" />
-            <div className="mt-6 space-y-5">
-              <div className="rounded-3xl border border-white/8 bg-slate-950/40 p-5">
-                <div className="flex items-start gap-3">
-                  <GraduationCap className="mt-1 h-5 w-5 text-cyan-300" />
-                  <div>
-                    <h3 className="font-semibold text-white">B.Sc. Mathematics</h3>
-                    <p className="mt-1 text-sm text-slate-300">
-                      Focused on statistics, applied math, and computational thinking.
-                    </p>
-                    <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500">
-                      2022 - 2025
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="rounded-3xl border border-white/8 bg-slate-950/40 p-5">
-                <div className="flex items-start gap-3">
-                  <BookOpen className="mt-1 h-5 w-5 text-cyan-300" />
-                  <div>
-                    <h3 className="font-semibold text-white">Relevant Coursework</h3>
-                    <p className="mt-1 text-sm text-slate-300">
-                      Data structures, algorithms, DBMS, research methods, and web development.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          <Card id="experience" className="p-6">
-            <SectionHeading eyebrow="Experience" title="Teaching, Building, Improving" />
-            <div className="mt-6 space-y-5">
-              <div className="rounded-3xl border border-white/8 bg-slate-950/40 p-5">
-                <div className="flex items-start gap-3">
-                  <BriefcaseBusiness className="mt-1 h-5 w-5 text-cyan-300" />
-                  <div>
-                    <h3 className="font-semibold text-white">
-                      Mathematics & Tutoring
-                    </h3>
-                    <p className="mt-1 text-sm text-slate-300">
-                      Guided students in calculus, algebra, and structured problem-solving with clarity and patience.
-                    </p>
-                    <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500">
-                      2023 - Present
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="rounded-3xl border border-white/8 bg-slate-950/40 p-5">
-                <div className="flex items-start gap-3">
-                  <Sparkles className="mt-1 h-5 w-5 text-cyan-300" />
-                  <div>
-                    <h3 className="font-semibold text-white">Independent Development</h3>
-                    <p className="mt-1 text-sm text-slate-300">
-                      Building modern portfolio and product-style interfaces with thoughtful motion and responsive UX.
-                    </p>
-                    <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500">
-                      Ongoing
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          <Card id="research" className="p-6">
-            <SectionHeading eyebrow="Research & Goals" title="Where I want to grow next" />
-            <div className="mt-6 space-y-4">
-              {researchItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div
-                    key={item.title}
-                    className="rounded-3xl border border-white/8 bg-slate-950/40 p-5"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/10 p-2.5 text-cyan-300">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-white">{item.title}</h3>
-                        <p className="mt-1 text-sm leading-7 text-slate-300">
-                          {item.text}
-                        </p>
-                      </div>
+        <SectionShell id="experience">
+          <div className="grid gap-6 xl:grid-cols-[0.8fr_1fr_0.9fr]">
+            <Reveal>
+              <Card className="p-6 sm:p-8">
+                <SectionHeading eyebrow="Education" title="Academic Foundation" />
+                <div className="mt-6 rounded-3xl border border-white/8 bg-slate-950/35 p-5">
+                  <div className="flex items-start gap-3">
+                    <GraduationCap className="mt-1 h-5 w-5 text-cyan-300" />
+                    <div>
+                      <h3 className="font-semibold text-white">B.Sc. in Mathematics</h3>
+                      <p className="mt-2 text-sm leading-7 text-slate-300">
+                        Focused on statistics, applied mathematics, analytical reasoning, and computational thinking.
+                      </p>
+                      <p className="mt-3 text-xs uppercase tracking-[0.24em] text-slate-500">2022 - 2025</p>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </Card>
-        </section>
+                </div>
+              </Card>
+            </Reveal>
 
-        <section id="projects" className="mt-6">
-          <Card className="p-6 sm:p-8">
+            <Reveal delay={0.05}>
+              <Card className="p-6 sm:p-8">
+                <SectionHeading eyebrow="Experience" title="Clear communication and practical building" />
+                <div className="mt-6 space-y-4">
+                  {experiences.map((item) => (
+                    <div key={item.title} className="rounded-3xl border border-white/8 bg-slate-950/35 p-5">
+                      <div className="flex items-start gap-3">
+                        <BriefcaseBusiness className="mt-1 h-5 w-5 text-cyan-300" />
+                        <div>
+                          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                            <h3 className="font-semibold text-white">{item.title}</h3>
+                            <span className="text-xs uppercase tracking-[0.24em] text-slate-500">{item.period}</span>
+                          </div>
+                          <p className="mt-3 text-sm leading-7 text-slate-300">{item.text}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </Reveal>
+
+            <Reveal delay={0.1}>
+              <Card className="p-6 sm:p-8">
+                <SectionHeading eyebrow="Research & Goals" title="Direction for long-term growth" />
+                <div className="mt-6 space-y-4">
+                  {researchItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={item.title} className="rounded-3xl border border-white/8 bg-slate-950/35 p-5">
+                        <div className="flex items-start gap-3">
+                          <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/10 p-2.5 text-cyan-300">
+                            <Icon className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-white">{item.title}</h3>
+                            <p className="mt-2 text-sm leading-7 text-slate-300">{item.text}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </Card>
+            </Reveal>
+          </div>
+        </SectionShell>
+
+        <SectionShell id="projects">
+          <Reveal>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <SectionHeading
-                eyebrow="Featured Projects"
-                title="Selected work built for clarity, speed, and impact"
+                eyebrow="Projects"
+                title="Selected work with practical structure"
+                description="Each project is presented with clear purpose, balanced layout, and real-world UI thinking."
               />
-              <Link
-                href="#contact"
-                className="inline-flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-cyan-200"
-              >
-                View All
+              <Link href="#contact" className="inline-flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-white">
+                Start a conversation
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-
-            <div className="mt-8 grid gap-5 lg:grid-cols-3">
-              {projects.map((project, index) => (
-                <Card
-                  key={project.name}
-                  className="overflow-hidden rounded-[30px] border-white/10 bg-slate-950/50"
-                >
-                  <div className="aspect-[16/10] border-b border-white/8 bg-[linear-gradient(135deg,rgba(56,189,248,0.18),rgba(15,23,42,0.2)),radial-gradient(circle_at_top_left,rgba(59,130,246,0.32),transparent_42%),linear-gradient(180deg,#0f172a,#020617)] p-4">
-                    <div className="grid h-full grid-cols-3 gap-3 rounded-[22px] border border-white/10 bg-slate-950/25 p-3">
+          </Reveal>
+          <div className="mt-8 grid gap-5 lg:grid-cols-3">
+            {projects.map((project, index) => (
+              <Reveal key={project.name} delay={index * 0.06}>
+                <Card className="h-full overflow-hidden rounded-[30px] border-white/10 bg-slate-950/45 transition hover:-translate-y-1 hover:border-white/15">
+                  <div className="aspect-16/10 border-b border-white/8 bg-[linear-gradient(180deg,rgba(56,189,248,0.10),rgba(15,23,42,0.1)),linear-gradient(135deg,#0f172a,#020617)] p-4">
+                    <div className="grid h-full grid-cols-3 gap-3 rounded-[22px] border border-white/10 bg-slate-950/35 p-3">
                       <div className="rounded-2xl bg-white/10" />
-                      <div className="rounded-2xl bg-white/5" />
+                      <div className="rounded-2xl bg-white/6" />
                       <div className="rounded-2xl bg-white/10" />
-                      <div className="col-span-2 rounded-2xl bg-white/5" />
-                      <div className="rounded-2xl bg-cyan-400/20" />
+                      <div className="col-span-2 rounded-2xl bg-white/6" />
+                      <div className="rounded-2xl bg-cyan-400/15" />
                     </div>
                   </div>
                   <div className="space-y-4 p-5">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-display text-xl font-medium text-white">
-                        {project.name}
-                      </h3>
-                      <span className="text-xs uppercase tracking-[0.25em] text-slate-500">
-                        0{index + 1}
-                      </span>
+                    <div className="flex items-center justify-between gap-4">
+                      <h3 className="font-display text-xl font-medium text-white">{project.name}</h3>
+                      <span className="text-xs uppercase tracking-[0.25em] text-slate-500">0{index + 1}</span>
                     </div>
-                    <p className="text-sm leading-7 text-slate-300">
-                      {project.description}
-                    </p>
+                    <p className="text-sm font-medium leading-7 text-slate-200">{project.summary}</p>
+                    <p className="text-sm leading-7 text-slate-400">{project.details}</p>
                     <div className="flex flex-wrap gap-2">
                       {project.stack.map((item) => (
-                        <span
-                          key={item}
-                          className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300"
-                        >
+                        <span key={item} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300">
                           {item}
                         </span>
                       ))}
                     </div>
                     <div className="flex gap-3">
-                      <Button variant="secondary" className="flex-1">
-                        Live Demo
-                      </Button>
-                      <Button variant="secondary" className="flex-1">
-                        GitHub
-                      </Button>
+                      <Button variant="secondary" className="flex-1">Live Demo</Button>
+                      <Button variant="secondary" className="flex-1">GitHub</Button>
                     </div>
                   </div>
                 </Card>
-              ))}
-            </div>
-          </Card>
-        </section>
+              </Reveal>
+            ))}
+          </div>
+        </SectionShell>
 
-        <section className="mt-6 grid gap-6 lg:grid-cols-[1fr_0.85fr]">
-          <Card id="contact" className="p-6 sm:p-8">
-            <SectionHeading
-              eyebrow="Let's Connect"
-              title="Tell me about your next build"
-              description="If you have an internship, freelance opportunity, or collaboration in mind, send a message and let's talk."
-            />
-            <div className="mt-8">
-              <ContactForm />
+        <SectionShell id="blog">
+          <Reveal>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <SectionHeading
+                eyebrow="Blog"
+                title="Writing that can grow with the portfolio"
+                description="A clean content section helps show process, technical thinking, and communication skills without cluttering the homepage."
+              />
+              <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-white">
+                Open blog page
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
-          </Card>
-
-          <Card className="p-6 sm:p-8">
-            <SectionHeading
-              eyebrow="Contact Details"
-              title="Easy to reach, quick to respond"
-            />
-            <div className="mt-8 space-y-4">
-              {[
-                { icon: Mail, value: "yourname@email.com" },
-                { icon: BriefcaseBusiness, value: "linkedin.com/in/yourname" },
-                { icon: BookOpen, value: "yourname.dev/blog" },
-              ].map(({ icon: ItemIcon, value }) => {
-                return (
-                  <div
-                    key={value}
-                    className="flex items-center gap-4 rounded-3xl border border-white/8 bg-slate-950/40 p-4"
-                  >
-                    <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/10 p-3 text-cyan-300">
-                      <ItemIcon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
-                        Direct Contact
-                      </p>
-                      <p className="mt-1 text-sm text-slate-200">{value}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="mt-8 rounded-[28px] border border-cyan-400/15 bg-cyan-400/10 p-5">
-              <p className="font-medium text-cyan-100">
-                Usually replies within 24 hours.
-              </p>
-              <p className="mt-2 text-sm leading-7 text-cyan-50/80">
-                The architecture is intentionally future-ready, so a separate
-                backend, database, or admin panel can be added later without
-                redesigning the whole site.
-              </p>
-            </div>
-          </Card>
-        </section>
-
-        <footer className="mt-10 border-t border-white/8 py-8">
-          <div className="flex flex-col gap-4 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-            <p>Copyright 2026 Your Name. Crafted with Next.js, Tailwind CSS, and motion.</p>
-            <div className="flex flex-wrap gap-4">
-              {["Home", "About", "Skills", "Projects", "Blog", "Contact"].map(
-                (item) => (
-                  <Link
-                    key={item}
-                    href={`#${item.toLowerCase()}`}
-                    className="transition hover:text-cyan-300"
-                  >
-                    {item}
+          </Reveal>
+          <div className="mt-8 grid gap-5 lg:grid-cols-2">
+            {blogPreview.map((post, index) => (
+              <Reveal key={post.title} delay={index * 0.05}>
+                <Card className="h-full p-6 transition hover:-translate-y-1 hover:border-white/15">
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">{post.meta}</p>
+                  <h3 className="mt-4 font-display text-2xl font-medium text-white">{post.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-slate-300">{post.description}</p>
+                  <Link href="/blog" className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-white">
+                    Read more
+                    <ArrowRight className="h-4 w-4" />
                   </Link>
-                ),
-              )}
+                </Card>
+              </Reveal>
+            ))}
+          </div>
+        </SectionShell>
+
+        <SectionShell id="contact">
+          <div className="grid gap-6 lg:grid-cols-[1fr_0.85fr]">
+            <Reveal>
+              <Card className="p-6 sm:p-8">
+                <SectionHeading
+                  eyebrow="Contact"
+                  title="Tell me about your next build"
+                  description="If you have an internship, freelance opportunity, or collaboration in mind, send a message and I will get back to you as soon as possible."
+                />
+                <div className="mt-8">
+                  <ContactForm />
+                </div>
+              </Card>
+            </Reveal>
+
+            <Reveal delay={0.06}>
+              <Card className="p-6 sm:p-8">
+                <SectionHeading
+                  eyebrow="Direct Contact"
+                  title="Easy to reach, simple to navigate"
+                />
+                <div className="mt-8 space-y-4">
+                  {[
+                    { icon: Mail, value: "yourname@email.com", label: "Email" },
+                    { icon: BriefcaseBusiness, value: "linkedin.com/in/yourname", label: "LinkedIn" },
+                    { icon: BookOpen, value: "yourname.dev/blog", label: "Blog" },
+                  ].map(({ icon: ItemIcon, value, label }) => (
+                    <div key={value} className="flex items-center gap-4 rounded-3xl border border-white/8 bg-slate-950/35 p-4">
+                      <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/10 p-3 text-cyan-300">
+                        <ItemIcon className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{label}</p>
+                        <p className="mt-1 text-sm text-slate-200">{value}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-8 rounded-[28px] border border-cyan-400/15 bg-cyan-400/10 p-5">
+                  <p className="font-medium text-cyan-100">Usually replies within 24 hours.</p>
+                  <p className="mt-2 text-sm leading-7 text-cyan-50/80">
+                    The current architecture stays lightweight for performance, but it is ready for a future database, admin panel, or separate backend when needed.
+                  </p>
+                </div>
+              </Card>
+            </Reveal>
+          </div>
+        </SectionShell>
+
+        <footer className="border-t border-white/8 py-8">
+          <div className="flex flex-col gap-4 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+            <p>Copyright 2026 Your Name. Built with Next.js, Tailwind CSS, and purposeful motion.</p>
+            <div className="flex flex-wrap gap-4">
+              {[
+                { label: "Home", href: "#home" },
+                { label: "About", href: "#about" },
+                { label: "Skills", href: "#skills" },
+                { label: "Projects", href: "#projects" },
+                { label: "Blog", href: "/blog" },
+                { label: "Contact", href: "#contact" },
+              ].map((item) => (
+                <Link key={item.label} href={item.href} className="transition hover:text-white">
+                  {item.label}
+                </Link>
+              ))}
             </div>
           </div>
         </footer>

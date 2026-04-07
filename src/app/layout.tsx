@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 
+import { HomeFab } from "@/components/home-fab";
+import { SiteNavbar } from "@/components/site-navbar";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 
 import "./globals.css";
@@ -32,6 +34,8 @@ export default function RootLayout({
         className={`${manrope.variable} ${spaceGrotesk.variable} bg-[#030816] font-sans text-slate-100 antialiased`}
       >
         <SmoothScrollProvider />
+        <SiteNavbar />
+        <HomeFab />
         {children}
       </body>
     </html>
