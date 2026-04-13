@@ -1,5 +1,6 @@
-import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
+
+import { createMailTransport } from "@/lib/mailer";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_NAME_LENGTH = 100;
@@ -89,48 +90,16 @@ export async function POST(request: Request) {
       );
     }
 
-    if (
-      !process.env.SMTP_HOST ||
-      !process.env.SMTP_PORT ||
-      !process.env.SMTP_USER ||
-      !process.env.SMTP_PASS ||
-      !process.env.CONTACT_EMAIL
-    ) {
-      console.error("Contact API misconfigured: missing SMTP environment variables.");
-      return NextResponse.json(
-        { error: "Email service is not configured." },
-        { status: 500 },
-      );
-    }
-
-    const smtpPort = Number(process.env.SMTP_PORT);
-    if (!Number.isInteger(smtpPort) || smtpPort <= 0) {
-      console.error("Contact API misconfigured: invalid SMTP_PORT value.");
-      return NextResponse.json(
-        { error: "Email service is not configured." },
-        { status: 500 },
-      );
-    }
-
     const safeName = escapeHtml(name);
     const safeEmail = escapeHtml(email);
     const safeSubject = escapeHtml(subject);
     const safeMessage = escapeHtml(message).replace(/\n/g, "<br />");
-
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: smtpPort,
-      secure: smtpPort === 465,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
+    const { transporter, fromEmail, contactEmail } = createMailTransport();
 
     await withTimeout(
       transporter.sendMail({
-        from: `"Portfolio Contact" <${process.env.SMTP_USER}>`,
-        to: process.env.CONTACT_EMAIL,
+        from: `"Portfolio Contact" <${fromEmail}>`,
+        to: contactEmail,
         replyTo: email,
         subject: `Portfolio inquiry: ${subject}`,
         text: `Name: ${name}\nEmail: ${email}\n\n${message}`,

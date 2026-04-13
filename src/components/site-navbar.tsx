@@ -12,6 +12,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 const navigation = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
+  { label: "Services", href: "#services" },
   { label: "Skills", href: "#skills" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
@@ -55,7 +56,7 @@ export function SiteNavbar() {
               <p className="font-display text-sm font-semibold tracking-wide text-white">
             Dhananjoy Chandra Das
               </p>
-              <p className="text-xs text-slate-400">Full-Stack Developer</p>
+              <p className="text-xs text-slate-400">Full Stack Web Developer</p>
             </div>
           </Link>
 

@@ -18,9 +18,14 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Your Name | Full-Stack Developer Portfolio",
+  title: "Dhananjoy Chandra Das | Full Stack Web Developer",
   description:
-    "A modern full-stack developer portfolio built with Next.js 15, Tailwind CSS, Framer Motion, GSAP, and Lenis.",
+"I am studing in mathematics and passionate about web development. I very expert in nextjs ,reactjs, typescript, nodejs, expresjsjs, mongodb, mysql, postgresql, prisma and many more. I love to fix a bug and learn new technology. I am a quick learner and always eager to learn new things.",
+  icons: {
+    icon: "/images/logo.png",
+    shortcut: "/images/logo.png",
+    apple: "/images/logo.png",
+  },
 };
 
 export default function RootLayout({

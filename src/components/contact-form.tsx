@@ -16,8 +16,9 @@ export function ContactForm() {
     event.preventDefault();
     setStatus("loading");
     setMessage("");
+    const form = event.currentTarget;
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 
     const response = await fetch("/api/contact", {
@@ -29,7 +30,7 @@ export function ContactForm() {
     });
 
     if (response.ok) {
-      event.currentTarget.reset();
+      form.reset();
       setStatus("success");
       setMessage("Message sent successfully. I usually reply within 24 hours.");
       return;

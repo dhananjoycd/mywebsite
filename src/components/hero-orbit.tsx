@@ -16,7 +16,7 @@ const orbitItems = [
 
 export function HeroOrbit() {
   const orbitRef = useRef<HTMLDivElement>(null);
-  const [profileSrc, setProfileSrc] = useState("/images/profile.jpg");
+  const [profileSrc, setProfileSrc] = useState("/images/logo.png");
 
   useEffect(() => {
     if (!orbitRef.current) return;
@@ -45,16 +45,16 @@ export function HeroOrbit() {
   return (
     <div
       ref={orbitRef}
-      className="relative mx-auto flex aspect-square w-full max-w-115 items-center justify-center"
+      className="relative mx-auto flex aspect-square w-full max-w-120 items-center justify-center lg:max-w-136"
     >
-      <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.14),transparent_58%)] blur-3xl" />
-      <div className="orbit-ring absolute inset-[7%] rounded-full border border-cyan-400/14" />
-      <div className="orbit-ring absolute inset-[16%] rounded-full border border-white/8" />
+      <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.12),transparent_58%)] blur-3xl" />
+      <div className="orbit-ring absolute inset-[8%] rounded-full border border-cyan-400/14" />
+      <div className="orbit-ring absolute inset-[17%] rounded-full border border-white/8" />
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="hero-core relative flex aspect-square w-[70%] items-center justify-center rounded-full border border-cyan-300/20 bg-[radial-gradient(circle_at_30%_20%,rgba(96,165,250,0.72),rgba(37,99,235,0.24)_48%,rgba(2,6,23,0.98)_85%)] p-6 shadow-[0_0_48px_rgba(37,99,235,0.16)]"
+        className="hero-core relative flex aspect-square w-[66%] items-center justify-center rounded-full border border-cyan-300/20 bg-[radial-gradient(circle_at_30%_20%,rgba(96,165,250,0.72),rgba(37,99,235,0.24)_48%,rgba(2,6,23,0.98)_85%)] p-5 shadow-[0_0_48px_rgba(37,99,235,0.16)]"
       >
         <div className="absolute inset-3 rounded-full border border-white/12" />
         <div className="relative h-full w-full overflow-hidden rounded-full border border-cyan-200/15 bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.08),transparent_40%),linear-gradient(180deg,rgba(2,6,23,0.08),rgba(2,6,23,0.72))]">
@@ -77,9 +77,9 @@ export function HeroOrbit() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 * index, duration: 0.4 }}
-            className={`absolute ${item.position} flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/78 text-cyan-300 shadow-[0_8px_24px_rgba(0,0,0,0.22)] backdrop-blur transition-transform duration-500 hover:-translate-y-1`}
+            className={`absolute ${item.position} flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/78 text-cyan-300 shadow-[0_8px_24px_rgba(0,0,0,0.22)] backdrop-blur transition-transform duration-500 hover:-translate-y-1`}
           >
-            <Icon className="h-5 w-5" />
+            <Icon className="h-4 w-4" />
           </motion.div>
         );
       })}
