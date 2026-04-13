@@ -38,8 +38,13 @@ export function SiteNavbar() {
   const resumeHref = "https://drive.google.com/uc?export=download&id=14wDMPhN_NincwEaMl_3B3ikaeJ2Z9Ir1";
 
   return (
-    <div className="fixed inset-x-0 top-4 z-50 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl rounded-[28px] border border-white/8 bg-slate-950/84 px-4 py-3 shadow-[0_18px_40px_rgba(2,6,23,0.24)] backdrop-blur-xl">
+    <div className="fixed inset-x-0 top-0 z-50">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-slate-950/28 backdrop-blur-2xl [mask-image:linear-gradient(to_bottom,black_0%,black_75%,transparent_100%)]"
+      />
+      <div className="relative px-4 pt-3 sm:px-6 sm:pt-4 lg:px-8">
+        <div className="mx-auto max-w-7xl rounded-[28px] border border-white/10 bg-slate-950/55 px-4 py-3 shadow-[0_18px_40px_rgba(2,6,23,0.24)] backdrop-blur-2xl supports-[backdrop-filter]:bg-slate-950/45">
         <div className="flex items-center justify-between gap-4">
           <Link href="/#home" className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-full border border-cyan-300/30 bg-slate-900/90 p-1.5 shadow-[0_0_0_2px_rgba(34,211,238,0.12)]">
@@ -142,6 +147,7 @@ export function SiteNavbar() {
             </motion.div>
           ) : null}
         </AnimatePresence>
+        </div>
       </div>
     </div>
   );
