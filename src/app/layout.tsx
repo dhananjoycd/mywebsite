@@ -20,7 +20,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Dhananjoy Chandra Das | Full Stack Web Developer",
   description:
-"I am studing in mathematics and passionate about web development. I very expert in nextjs ,reactjs, typescript, nodejs, expresjsjs, mongodb, mysql, postgresql, prisma and many more. I love to fix a bug and learn new technology. I am a quick learner and always eager to learn new things.",
+    "I am studying mathematics and passionate about web development. I am proficient in Next.js, React, TypeScript, Node.js, Express.js, MongoDB, MySQL, PostgreSQL, Prisma, and more. I love fixing bugs and learning new technologies. I am a quick learner and always eager to learn new things.",
   icons: {
     icon: "/images/logo.png",
     shortcut: "/images/logo.png",

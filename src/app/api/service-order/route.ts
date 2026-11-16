@@ -1,28 +1,21 @@
 import { NextResponse } from "next/server";
-
+import { prisma } from "@/lib/prisma";
 import { createMailTransport } from "@/lib/mailer";
+import { 
+  generateAdminOrderAlertHtml, 
+  generateClientConfirmationHtml 
+} from "@/lib/email-templates";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_REGEX = /^[+()\-.\s\d]{7,30}$/;
 const MAX_NAME_LENGTH = 100;
-const MAX_EMAIL_LENGTH = 160;
 const MAX_PHONE_LENGTH = 30;
-const MAX_SERVICE_TITLE_LENGTH = 120;
-const MAX_PRICE_LENGTH = 80;
-const MAX_DETAILS_LENGTH = 1200;
+const MAX_SERVICE_TITLE_LENGTH = 150;
+const MAX_PRICE_LENGTH = 50;
+const MAX_DETAILS_LENGTH = 3000;
 const MAIL_TIMEOUT_MS = 10000;
 
 function normalizeInput(value: unknown) {
   return typeof value === "string" ? value.trim().replace(/\s+/g, " ") : "";
-}
-
-function normalizePoints(value: unknown) {
-  if (!Array.isArray(value)) return [];
-
-  return value
-    .map((item) => normalizeInput(item))
-    .filter(Boolean)
-    .slice(0, 8);
 }
 
 function escapeHtml(value: string) {
@@ -30,7 +23,7 @@ function escapeHtml(value: string) {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
+    .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#39;");
 }
 
@@ -61,14 +54,24 @@ export async function POST(request: Request) {
     const name = normalizeInput(body.name);
     const email = normalizeInput(body.email).toLowerCase();
     const phone = normalizeInput(body.phone);
-    const details = normalizeInput(body.details);
     const serviceTitle = normalizeInput(body.serviceTitle);
     const servicePrice = normalizeInput(body.servicePrice);
-    const servicePoints = normalizePoints(body.servicePoints);
+    const details = normalizeInput(body.details);
+    const company = normalizeInput(body.company);
+
+    const rawPoints = Array.isArray(body.servicePoints) ? body.servicePoints : [];
+    const servicePoints = rawPoints
+      .map((point) => normalizeInput(point))
+      .filter((point) => Boolean(point));
+
+    // Honeypot check for bots
+    if (company) {
+      return NextResponse.json({ ok: true });
+    }
 
     if (!name || !email || !phone || !serviceTitle || !servicePrice) {
       return NextResponse.json(
-        { error: "Name, email, phone, and service details are required." },
+        { error: "Please fill in all required fields." },
         { status: 400 },
       );
     }
@@ -80,23 +83,30 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!PHONE_REGEX.test(phone)) {
+    if (name.length > MAX_NAME_LENGTH) {
       return NextResponse.json(
-        { error: "Please enter a valid phone number." },
+        { error: `Name must be ${MAX_NAME_LENGTH} characters or fewer.` },
         { status: 400 },
       );
     }
 
-    if (name.length > MAX_NAME_LENGTH || email.length > MAX_EMAIL_LENGTH || phone.length > MAX_PHONE_LENGTH) {
+    if (phone.length > MAX_PHONE_LENGTH) {
       return NextResponse.json(
-        { error: "One or more fields are too long." },
+        { error: `Phone must be ${MAX_PHONE_LENGTH} characters or fewer.` },
         { status: 400 },
       );
     }
 
-    if (serviceTitle.length > MAX_SERVICE_TITLE_LENGTH || servicePrice.length > MAX_PRICE_LENGTH) {
+    if (serviceTitle.length > MAX_SERVICE_TITLE_LENGTH) {
       return NextResponse.json(
-        { error: "Invalid service information." },
+        { error: `Service title must be ${MAX_SERVICE_TITLE_LENGTH} characters or fewer.` },
+        { status: 400 },
+      );
+    }
+
+    if (servicePrice.length > MAX_PRICE_LENGTH) {
+      return NextResponse.json(
+        { error: `Price must be ${MAX_PRICE_LENGTH} characters or fewer.` },
         { status: 400 },
       );
     }
@@ -108,7 +118,27 @@ export async function POST(request: Request) {
       );
     }
 
-    const { transporter, fromEmail, contactEmail } = createMailTransport();
+    const trackingCode = `ORD-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+
+    // 1. Persist order to database first so the lead is never lost
+    let savedOrder = null;
+    try {
+      savedOrder = await prisma.order.create({
+        data: {
+          trackingCode,
+          clientName: name,
+          clientEmail: email,
+          clientPhone: phone,
+          serviceTitle,
+          servicePrice,
+          servicePoints,
+          projectDetails: details || null,
+          status: "PENDING",
+        },
+      });
+    } catch (dbError) {
+      console.error("Failed to save order to database:", dbError);
+    }
 
     const safeName = escapeHtml(name);
     const safeEmail = escapeHtml(email);
@@ -116,46 +146,76 @@ export async function POST(request: Request) {
     const safeServiceTitle = escapeHtml(serviceTitle);
     const safeServicePrice = escapeHtml(servicePrice);
     const safeDetails = escapeHtml(details || "Not provided.").replace(/\n/g, "<br />");
-    const safePoints = servicePoints.map((point) => `<li>${escapeHtml(point)}</li>`).join("");
 
-    await withTimeout(
-      transporter.sendMail({
-        from: `"Portfolio Orders" <${fromEmail}>`,
-        to: contactEmail,
-        replyTo: email,
-        subject: `Service order request: ${serviceTitle}`,
-        text:
-          `New service order request\n\n` +
-          `Service: ${serviceTitle}\n` +
-          `Starting price: ${servicePrice}\n` +
-          `Name: ${name}\n` +
-          `Email: ${email}\n` +
-          `Phone: ${phone}\n\n` +
-          `Project details:\n${details || "Not provided."}\n\n` +
-          `Included points:\n${servicePoints.map((point) => `- ${point}`).join("\n")}`,
-        html: `
-          <div style="font-family:Arial,sans-serif;line-height:1.6;color:#111827;">
-            <h2>New Service Order Request</h2>
-            <p><strong>Service:</strong> ${safeServiceTitle}</p>
-            <p><strong>Starting Price:</strong> ${safeServicePrice}</p>
-            <p><strong>Name:</strong> ${safeName}</p>
-            <p><strong>Email:</strong> ${safeEmail}</p>
-            <p><strong>Phone:</strong> ${safePhone}</p>
-            <p><strong>Project Details:</strong></p>
-            <p>${safeDetails}</p>
-            <p><strong>Included Points:</strong></p>
-            <ul>${safePoints}</ul>
-          </div>
-        `,
-      }),
-      MAIL_TIMEOUT_MS,
-    );
+    // 2. Email Notifications Engine (Admin Alert + Client Confirmation)
+    try {
+      const { transporter, fromEmail, contactEmail } = createMailTransport();
 
-    return NextResponse.json({ ok: true });
+      const origin = request.headers.get("origin") || "http://localhost:3000";
+      const trackingUrl = `${origin}/track-order?code=${trackingCode}`;
+
+      // A. Send Admin Alert Email
+      await withTimeout(
+        transporter.sendMail({
+          from: `"Dhananjoy Orders" <${fromEmail}>`,
+          to: contactEmail,
+          replyTo: email,
+          subject: `[${trackingCode}] New Order: ${serviceTitle} from ${name}`,
+          text:
+            `New service order request (${trackingCode})\n\n` +
+            `Tracking Code: ${trackingCode}\n` +
+            `Service: ${serviceTitle}\n` +
+            `Price: ${servicePrice}\n` +
+            `Client: ${name} (${email}, ${phone})\n\n` +
+            `Project Requirements:\n${details || "Not provided."}`,
+          html: generateAdminOrderAlertHtml({
+            trackingCode,
+            serviceTitle: safeServiceTitle,
+            servicePrice: safeServicePrice,
+            clientName: safeName,
+            clientEmail: safeEmail,
+            clientPhone: safePhone,
+            projectDetails: safeDetails,
+            servicePoints,
+          }),
+        }),
+        MAIL_TIMEOUT_MS,
+      );
+
+      // B. Send Client Confirmation Email with Tracking Link
+      await withTimeout(
+        transporter.sendMail({
+          from: `"Dhananjoy Chandra Das" <${fromEmail}>`,
+          to: email,
+          subject: `Order Confirmation: ${serviceTitle} [${trackingCode}]`,
+          text:
+            `Hello ${name},\n\n` +
+            `Thank you for reaching out! I have received your request for "${serviceTitle}".\n` +
+            `Your Tracking Code is: ${trackingCode}\n\n` +
+            `Track your order status anytime at: ${trackingUrl}\n\n` +
+            `Best regards,\nDhananjoy Chandra Das`,
+          html: generateClientConfirmationHtml({
+            trackingCode,
+            serviceTitle: safeServiceTitle,
+            clientName: safeName,
+            trackingUrl,
+          }),
+        }),
+        MAIL_TIMEOUT_MS,
+      );
+    } catch (mailError) {
+      console.error("Mail send failed, but order was recorded in DB:", mailError);
+    }
+
+    return NextResponse.json({ 
+      ok: true, 
+      trackingCode,
+      orderId: savedOrder?.id 
+    });
   } catch (error) {
     console.error("Service order submission failed.", error);
     return NextResponse.json(
-      { error: "Unable to send the order request right now. Please try again later." },
+      { error: "Unable to process the order request right now. Please try again later." },
       { status: 500 },
     );
   }

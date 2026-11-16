@@ -7,9 +7,6 @@ import {
   Download,
   GraduationCap,
   Mail,
-  MoveRight,
-  Sparkles,
-  Telescope,
 } from "lucide-react";
 
 import { ClickRipple } from "@/components/click-ripple";
@@ -22,6 +19,17 @@ import { ServicesSection } from "@/components/services-section";
 import { SectionHeading } from "@/components/section-heading";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import {
+  getProfileData,
+  getSkillGroups,
+  getExperiences,
+  getEducations,
+  getProjects,
+  getActiveServices,
+  getPublishedBlogPosts,
+} from "@/lib/data";
+
+export const dynamic = "force-dynamic";
 
 function GitHubMark(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -31,219 +39,6 @@ function GitHubMark(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-const skillGroups = [
-  {
-    title: "Frontend",
-    items: ["Next.js 15", "React", "TypeScript", "Tailwind CSS", "Shadcn UI"],
-  },
-  {
-    title: "Motion",
-    items: ["Framer Motion", "GSAP", "Lenis", "Micro interactions"],
-  },
-  {
-    title: "Backend Ready",
-    items: ["Nodemailer", "Route Handlers", "Server Actions", "API Design"],
-  },
-  {
-    title: "Workflow",
-    items: ["Git & GitHub", "Responsive Design", "Performance", "Vercel"],
-  },
-];
-
-const experiences = [
-  {
-    title: "Full-Stack Web Developer",
-    period: "2022 - Present",
-    text: "Building full-stack applications with Next.js, Node.js, PostgreSQL, and Prisma, with strong attention to scalability, clean UI, and production-ready structure.",
-    highlights: [
-      "Built projects such as FoodHub (E-commerce) and a University Club Management System",
-      "Implemented authentication, Stripe payment integration, and role-based access control",
-      "Focused on scalable architecture, maintainable code, and polished UI using Tailwind CSS and ShadCN",
-    ],
-    featured: true,
-  },
-  {
-    title: "Mathematics Instructor",
-    period: "2023 - Present",
-    text: "Teaching Mathematics at Anirban Coaching Center by turning complex concepts into clear, structured explanations for students.",
-    highlights: [
-      "Teach mathematics in a way that is approachable, organized, and concept-driven",
-      "Help students strengthen analytical thinking and step-by-step problem-solving",
-      "Built strong communication skills through regular classroom guidance and mentoring",
-    ],
-    featured: false,
-  },
-  {
-    title: "Research Enthusiast",
-    period: "2025 - Present",
-    text: "Exploring biomathematics through mathematical modeling, computational methods, and real-world disease spread analysis.",
-    highlights: [
-      "Working on disease modeling with SEIRS-based frameworks",
-      "Applying differential equations and computational techniques to biological systems",
-      "Studying the intersection of mathematics, biology, and practical health-related challenges",
-    ],
-    featured: false,
-  },
-];
-
-const academicItems = [
-  {
-    title: "B.Sc. (Hons.) in Mathematics",
-    institution: "University of Rajshahi",
-    period: "2022 - Present",
-    summary:
-      "Building a strong foundation in advanced mathematics while developing a research-oriented approach to real-world problem solving.",
-    highlights: [
-      "Focus on Real Analysis, Linear Algebra, Differential Equations, and Mathematical Modeling",
-      "Conducting biomathematics research, including disease modeling and SEIRS-based frameworks",
-      "Strengthening analytical thinking, statistics, and computational problem-solving skills",
-    ],
-    meta: "CGPA: pending / 4.00",
-  },
-  {
-    title: "Higher Secondary Certificate (Science)",
-    institution: "Dhaka Imperial College",
-    period: "2017 - 2019",
-    summary:
-      "Completed higher secondary studies with a strong quantitative base that shaped my interest in technology, logic, and structured reasoning.",
-    highlights: [
-      "Major subjects included Mathematics, Physics, and ICT",
-      "Developed an early interest in programming and logical problem solving",
-      "Built a strong base in science, abstraction, and quantitative reasoning",
-    ],
-    meta: "GPA: 5.00 / 5.00",
-  },
-];
-
-const projects = [
-  {
-    name: "FoodHub",
-    image: "/images/projects/foodhub.jpg",
-    summary: "A full-stack meal ordering platform built for customers, food providers, and administrators.",
-    highlights: [
-      "Built with Next.js App Router, TypeScript, Node.js, PostgreSQL, and Prisma",
-      "Implemented authentication, role-based access control, and Stripe payments",
-      "Focused on production-ready architecture, clean UI, and real-world usability",
-    ],
-    stack: [
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Node.js",
-      "Express.js",
-      "PostgreSQL",
-      "Prisma",
-      "Stripe",
-      "Cloudinary"
-    ],
-    tone: "Platform",
-    liveClientUrl: "https://foodhub-client-mauve.vercel.app",
-    liveServerUrl: "#",
- githubClientUrl: "https://github.com/dhananjoycd/nextjs_Client",
-    githubServerUrl: "https://github.com/dhananjoycd/prisma_express_server",
-  },
-  {
-    name: "University Club Management System",
-    image: "/images/projects/university-club-management-system.jpg",
-    summary: "A role-based management system for university clubs, events, memberships, and payments.",
-    highlights: [
-      "Developed with React, Node.js, Express.js, MongoDB, and Tailwind CSS",
-      "Included secure authentication, event management, and admin dashboard workflows",
-      "Handled role-based permissions and payment operations for organizational efficiency",
-    ],
-    stack: [
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Node.js",
-      "Express.js",
-      "PostgreSQL",
-      "Prisma",
-      "Stripe"
-    ],
-    tone: "Management",
-    liveClientUrl: "https://xyztechclub.vercel.app",
-    liveServerUrl: "#",
- githubClientUrl: "https://github.com/dhananjoycd/client_Club_Management",
-    githubServerUrl: "https://github.com/dhananjoycd/server_UniversityClubManagement",
-  },
-  {
-    name: "AmrKrishiBD",
-    image: "/images/projects/amrkrishibd.jpg",
-    summary: "A content platform focused on agriculture knowledge sharing and structured publishing.",
-    highlights: [
-      "Built with React, Node.js, Express.js, MongoDB, and Tailwind CSS",
-      "Supports structured content management, responsive layouts, and efficient data handling",
-      "Optimized for readability, scalability, and future content expansion",
-    ],
-    stack: [
- "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Node.js",
-      "Express.js",
-      "PostgreSQL",
-      "Prisma",
-         "Cloudinary"
-      
-    ],
-    tone: "Content",
-    liveClientUrl: "https://amarkrishi.vercel.app",
-    liveServerUrl: "#",
-    githubClientUrl: "https://github.com/dhananjoycd/client_amrKrishiBD",
-    githubServerUrl: "https://github.com/dhananjoycd/server_amrKrishiBD",
-  },
-];
-
-const researchItems = [
-  {
-    title: "Research Interests",
-    text: "Algorithms, optimization, and systems thinking that influence practical product decisions.",
-    icon: Telescope,
-  },
-  {
-    title: "Current Focus",
-    text: "Building responsive interfaces that feel organized, readable, and production-ready across devices.",
-    icon: Sparkles,
-  },
-  {
-    title: "Future Goals",
-    text: "Growing into scalable backend architecture and contributing to real-world applications with measurable impact.",
-    icon: MoveRight,
-  },
-];
-
-const blogPreview = [
-  {
-    title: "How I Think About Responsive Portfolio Layouts",
-    description: "A practical breakdown of spacing, content hierarchy, and scroll behavior for clean portfolio experiences.",
-    meta: "Design Systems | 4 min read",
-  },
-  {
-    title: "Building Motion That Supports UX Instead of Distracting From It",
-    description: "Using subtle transitions, hover states, and reveal timing to make interfaces feel polished and intentional.",
-    meta: "Frontend | 6 min read",
-  },
-];
-
-const profile = {
-  name: "Dhananjoy Chandra Das",
-  role: "Portfolio Overview",
-  heroLabel:
-    "Web Developer | Educator | Research Enthusiast",
-  availabilityLabel: "Open to internships, jobs, and freelance work",
-  rotatingRoles: [
-    "Full Stack web Developer",
-    "Next.js Developer",
-    "React Developer",
-  ],
-
-  resumeUrl: "https://drive.google.com/uc?export=download&id=14wDMPhN_NincwEaMl_3B3ikaeJ2Z9Ir1",
-  bio:
-    "I am a B.Sc. (Hons.) student in Mathematics at the University of Rajshahi and a passionate Full-Stack Web Developer. I specialize in building modern, scalable web applications using technologies like Next.js, React, TypeScript, Node.js, Express.js PostgreSQL, Prisma, and Tailwind CSS. In addition, I am actively engaged in research in biomathematics, applying mathematical modeling to real-world biological and health challenges.",
-  responseTime: "24/7",
-  experienceStartYear: 2023,
-};
 function SectionShell({
   id,
   children,
@@ -265,13 +60,31 @@ function SectionShell({
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const [
+    profile,
+    skillGroups,
+    experiences,
+    academicItems,
+    projects,
+    services,
+    blogPosts,
+  ] = await Promise.all([
+    getProfileData(),
+    getSkillGroups(),
+    getExperiences(),
+    getEducations(),
+    getProjects(),
+    getActiveServices(),
+    getPublishedBlogPosts(),
+  ]);
+
   const currentYear = new Date().getFullYear();
-  const yearsExperience = Math.max(1, currentYear - profile.experienceStartYear + 1);
+  const yearsExperience = Math.max(1, currentYear - (profile.experienceStartYear || 2023) + 1);
   const heroStats = [
     [String(projects.length), "Featured Projects"],
     [`${yearsExperience}+`, "Years Practice"],
-    [profile.responseTime, "Typical Reply Time"],
+    [profile.responseTime || "24/7", "Typical Reply Time"],
   ] as const;
 
   return (
@@ -279,12 +92,10 @@ export default function Home() {
       <ScrollBackground variant="home" />
       <ClickRipple />
 
-
       <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-28 sm:px-6 sm:pt-32 lg:px-8">
-
         <SectionShell id="home" compact>
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1.03fr)_minmax(320px,0.92fr)] lg:items-center">
-               <Reveal delay={0.12} className="flex flex-col items-center justify-center gap-5">
+            <Reveal delay={0.12} className="flex flex-col items-center justify-center gap-5">
               <HeroOrbit />
               <div className="w-full max-w-152 rounded-[30px] px-5 py-4 text-center shadow-[0_18px_55px_rgba(0,0,0,0.26)] backdrop-blur-xl sm:px-6 sm:py-5 lg:text-center">
                 <p className="text-center text-sm font-semibold leading-7 tracking-[0.12em] text-cyan-50 sm:text-[0.95rem] lg:leading-8">
@@ -300,7 +111,6 @@ export default function Home() {
             </Reveal>
             <Reveal className="flex flex-col items-center text-center lg:items-start lg:text-left">
               <div className="space-y-5 sm:space-y-6">
-          
                 <h1 className="mx-auto max-w-3xl font-display text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl lg:mx-0 lg:text-4xl">
                   <span className="block text-slate-100">Hello! I&apos;m {profile.name}</span>
                   <HeroTyping
@@ -308,7 +118,7 @@ export default function Home() {
                     className="mt-3 inline-flex min-h-[1.15em] min-w-[14ch] items-center whitespace-nowrap text-cyan-300"
                   />
                 </h1>
-             
+
                 <p className="mx-auto max-w-2xl text-sm leading-7 text-slate-300 sm:text-base sm:leading-8 lg:mx-0 lg:text-lg">
                   {profile.bio}
                 </p>
@@ -330,7 +140,6 @@ export default function Home() {
                   Download Resume
                   <Download className="h-4 w-4" />
                 </a>
-            
               </div>
 
               <div className="mt-8 grid w-full max-w-2xl gap-4 sm:grid-cols-3 lg:mx-0">
@@ -352,7 +161,7 @@ export default function Home() {
                 <SectionHeading
                   eyebrow="About Me"
                   title="A Full Stack Web Developer with a research mindset"
-                  description="I build practical, scalable web applications and bring a structured, problem-solving mindse to both software and research."
+                  description="I build practical, scalable web applications and bring a structured, problem-solving mindset to both software and research."
                 />
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   {[
@@ -370,7 +179,7 @@ export default function Home() {
                   ))}
                 </div>
                 <p className="mt-6 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-            My background in Mathematics gives me a strong foundation in analytical thinking and structured problem-solving. I apply this mindset to web development, focusing on building applications that are efficient, maintainable, and valuable in real-world use cases.
+                  My background in Mathematics gives me a strong foundation in analytical thinking and structured problem-solving. I apply this mindset to web development, focusing on building applications that are efficient, maintainable, and valuable in real-world use cases.
                 </p>
               </Card>
 
@@ -380,10 +189,10 @@ export default function Home() {
                     What I Build
                   </p>
                   <h3 className="mt-3 font-display text-lg font-medium text-white sm:text-xl">
-          Building Scalable Web Applications
+                    Building Scalable Web Applications
                   </h3>
                   <p className="mt-3 text-sm leading-6 text-slate-300 sm:leading-7">
-                I develop full-stack web applications that are fast, responsive, and built for real-world use. From dashboards to e-commerce platforms, I focus on creating solutions that deliver both performance and usability.
+                    I develop full-stack web applications that are fast, responsive, and built for real-world use. From dashboards to e-commerce platforms, I focus on creating solutions that deliver both performance and usability.
                   </p>
                   <p className="mt-4 text-[11px] uppercase tracking-[0.22em] text-slate-500 sm:text-xs">
                     Next.js • React.js • TypeScript • FULL-STACK
@@ -394,13 +203,13 @@ export default function Home() {
                     How I Work
                   </p>
                   <h3 className="mt-3 font-display text-lg font-medium text-white sm:text-xl">
-           Clean Process, Reliable Results
+                    Clean Process, Reliable Results
                   </h3>
                   <p className="mt-3 text-sm leading-6 text-slate-300 sm:leading-7">
-               My workflow is focused on clarity, structure, and efficiency. I write clean, maintainable code, design intuitive user experiences, and ensure performance across all devices.
+                    My workflow is focused on clarity, structure, and efficiency. I write clean, maintainable code, design intuitive user experiences, and ensure performance across all devices.
                   </p>
                   <p className="mt-4 text-[11px] uppercase tracking-[0.22em] text-slate-500 sm:text-xs">
-             CLEAN CODE • Usability • Performance
+                    CLEAN CODE • Usability • Performance
                   </p>
                 </div>
               </Card>
@@ -409,7 +218,15 @@ export default function Home() {
         </SectionShell>
 
         <SectionShell id="services">
-          <ServicesSection />
+          <ServicesSection
+            initialServices={services.map((s) => ({
+              id: s.id,
+              title: s.title,
+              description: s.description,
+              points: s.points,
+              price: s.price,
+            }))}
+          />
         </SectionShell>
 
         <SectionShell id="skills">
@@ -493,14 +310,16 @@ export default function Home() {
                             ))}
                           </div>
 
-                          <div className="mt-5 rounded-2xl border border-cyan-400/12 bg-cyan-400/8 px-4 py-3">
-                            <p className="text-[11px] uppercase tracking-[0.22em] text-cyan-200/80">
-                              Academic Note
-                            </p>
-                            <p className="mt-2 text-sm text-cyan-50">
-                              {item.meta}
-                            </p>
-                          </div>
+                          {item.meta && (
+                            <div className="mt-5 rounded-2xl border border-cyan-400/12 bg-cyan-400/8 px-4 py-3">
+                              <p className="text-[11px] uppercase tracking-[0.22em] text-cyan-200/80">
+                                Academic Note
+                              </p>
+                              <p className="mt-2 text-sm text-cyan-50">
+                                {item.meta}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -575,30 +394,6 @@ export default function Home() {
                 </div>
               </Card>
             </Reveal>
-{/* now no need this section */}
-{/*             <Reveal delay={0.1}>
-              <Card className="p-6 sm:p-8">
-                <SectionHeading eyebrow="Research & Goals" title="Direction for long-term growth" />
-                <div className="mt-6 space-y-4">
-                  {researchItems.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <div key={item.title} className="rounded-3xl border border-white/8 bg-slate-950/35 p-5">
-                        <div className="flex items-start gap-3">
-                          <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/10 p-2.5 text-cyan-300">
-                            <Icon className="h-5 w-5" />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-white">{item.title}</h3>
-                            <p className="mt-2 text-sm leading-7 text-slate-300">{item.text}</p>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </Card>
-            </Reveal> */}
           </div>
         </SectionShell>
 
@@ -620,7 +415,7 @@ export default function Home() {
             {projects.map((project, index) => (
               <Reveal key={project.name} delay={index * 0.06}>
                 <Card className="flex h-full flex-col overflow-hidden rounded-[30px] border-white/10 bg-slate-950/45 transition hover:-translate-y-1 hover:border-cyan-400/18">
-                  <div className="aspect-16/10 border-b border-white/8 bg-[linear-gradient(180deg,rgba(34,211,238,0.10),rgba(15,23,42,0.1)),linear-gradient(135deg,#0f172a,#020617)] p-4">
+                  <div className="aspect-[16/10] border-b border-white/8 bg-[linear-gradient(180deg,rgba(34,211,238,0.10),rgba(15,23,42,0.1)),linear-gradient(135deg,#0f172a,#020617)] p-4">
                     <div className="relative h-full overflow-hidden rounded-[22px] border border-white/10 bg-slate-950/35">
                       <Image
                         src={project.image}
@@ -670,7 +465,7 @@ export default function Home() {
                       ))}
                     </div>
                     <div className="mt-auto space-y-3 pt-6">
-                      {project.liveClientUrl !== "#" ? (
+                      {project.liveClientUrl && project.liveClientUrl !== "#" ? (
                         <a
                           href={project.liveClientUrl}
                           target="_blank"
@@ -683,42 +478,42 @@ export default function Home() {
                           </Button>
                         </a>
                       ) : (
-                        <Button className="w-full opacity">
+                        <Button className="w-full opacity-60" disabled>
                           Live Client
                           <ArrowRight className="h-4 w-4" />
                         </Button>
                       )}
 
                       <div className="grid gap-3 sm:grid-cols-2">
-                      {[
-                        { label: "Client", href: project.githubClientUrl },
-                        { label: "Server", href: project.githubServerUrl },
-                      ].map((linkItem) =>
-                        linkItem.href !== "#" ? (
-                          <a
-                            key={linkItem.label}
-                            href={linkItem.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex"
-                          >
-                            <Button variant="secondary" className="w-full">
+                        {[
+                          { label: "Client", href: project.githubClientUrl },
+                          { label: "Server", href: project.githubServerUrl },
+                        ].map((linkItem) =>
+                          linkItem.href && linkItem.href !== "#" ? (
+                            <a
+                              key={linkItem.label}
+                              href={linkItem.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex"
+                            >
+                              <Button variant="secondary" className="w-full">
+                                <GitHubMark className="h-4 w-4" />
+                                {linkItem.label}
+                              </Button>
+                            </a>
+                          ) : (
+                            <Button
+                              key={linkItem.label}
+                              variant="secondary"
+                              className="w-full opacity-60"
+                              disabled
+                            >
                               <GitHubMark className="h-4 w-4" />
                               {linkItem.label}
                             </Button>
-                          </a>
-                        ) : (
-                          <Button
-                            key={linkItem.label}
-                            variant="secondary"
-                            className="w-full opacity-60"
-                            disabled
-                          >
-                            <GitHubMark className="h-4 w-4" />
-                            {linkItem.label}
-                          </Button>
-                        ),
-                      )}
+                          ),
+                        )}
                       </div>
                     </div>
                   </div>
@@ -743,13 +538,18 @@ export default function Home() {
             </div>
           </Reveal>
           <div className="mt-8 grid gap-5 lg:grid-cols-2">
-            {blogPreview.map((post, index) => (
-              <Reveal key={post.title} delay={index * 0.05}>
+            {blogPosts.slice(0, 2).map((post, index) => (
+              <Reveal key={post.slug || post.title} delay={index * 0.05}>
                 <Card className="h-full p-6 transition hover:-translate-y-1 hover:border-white/15">
-                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">{post.meta}</p>
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">
+                    {post.category} • {post.readTime}
+                  </p>
                   <h3 className="mt-4 font-display text-2xl font-medium text-white">{post.title}</h3>
-                  <p className="mt-4 text-sm leading-7 text-slate-300">{post.description}</p>
-                  <Link href="/blog" className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-white">
+                  <p className="mt-4 text-sm leading-7 text-slate-300">{post.excerpt}</p>
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-white"
+                  >
                     Read more
                     <ArrowRight className="h-4 w-4" />
                   </Link>
@@ -782,19 +582,25 @@ export default function Home() {
                 />
                 <div className="mt-8 flex-1 space-y-4">
                   {[
-                    { icon: Mail, value: "dhananjoychandradas@gmail.com", label: "Email" },
-                    { icon: BriefcaseBusiness, value: "https://www.linkedin.com/in/dhananjoycd", label: "LinkedIn" },
-                    { icon: BookOpen, value: "dhananjoy.dev/blog", label: "Blog" },
-                  ].map(({ icon: ItemIcon, value, label }) => (
-                    <div key={value} className="flex items-center gap-4 rounded-3xl border border-white/8 bg-slate-950/35 p-4">
+                    { icon: Mail, value: profile.contactEmail, label: "Email", href: `mailto:${profile.contactEmail}` },
+                    { icon: BriefcaseBusiness, value: profile.linkedinUrl, label: "LinkedIn", href: profile.linkedinUrl },
+                    { icon: BookOpen, value: "dhananjoy.dev/blog", label: "Blog", href: "/blog" },
+                  ].map(({ icon: ItemIcon, value, label, href }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target={href.startsWith("http") ? "_blank" : undefined}
+                      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      className="flex items-center gap-4 rounded-3xl border border-white/8 bg-slate-950/35 p-4 transition hover:border-cyan-400/20"
+                    >
                       <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/10 p-3 text-cyan-300">
                         <ItemIcon className="h-5 w-5" />
                       </div>
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{label}</p>
-                        <p className="mt-1 text-sm text-slate-200">{value}</p>
+                        <p className="mt-1 truncate text-sm text-slate-200">{value}</p>
                       </div>
-                    </div>
+                    </a>
                   ))}
                 </div>
                 <div className="mt-8 rounded-[28px] border border-cyan-400/15 bg-cyan-400/10 p-5">
@@ -811,15 +617,17 @@ export default function Home() {
         <footer className="border-t border-white/8 py-5 sm:py-6">
           <div className="flex flex-col gap-3 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-2">
-              <p>© {currentYear} personal website. All rights reserved by {""} 
-              <a
-                href="https://github.com/dhananjoycd"
-                target="_blank"
-
-                className="text-cyan-300 transition hover:text-white"
-              >
-                Dhananjoy Chandra Das
-              </a> </p>
+              <p>
+                © {currentYear} personal website. All rights reserved by{" "}
+                <a
+                  href={profile.githubUrl || "https://github.com/dhananjoycd"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cyan-300 transition hover:text-white"
+                >
+                  {profile.name}
+                </a>
+              </p>
             </div>
             <div className="flex flex-wrap gap-4">
               {[

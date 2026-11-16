@@ -10,14 +10,15 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-type Service = {
+export type ServiceItem = {
+  id?: string;
   title: string;
   description: string;
   points: string[];
   price: string;
 };
 
-const services: Service[] = [
+const defaultServices: ServiceItem[] = [
   {
     title: "Frontend Development",
     description:
@@ -52,10 +53,16 @@ type OrderStatus = "idle" | "loading" | "success" | "error";
 type ToastState = {
   type: "success" | "error";
   message: string;
+  trackingCode?: string;
 } | null;
 
-export function ServicesSection() {
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
+interface ServicesSectionProps {
+  initialServices?: ServiceItem[];
+}
+
+export function ServicesSection({ initialServices }: ServicesSectionProps) {
+  const displayServices = initialServices && initialServices.length > 0 ? initialServices : defaultServices;
+  const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
   const [status, setStatus] = useState<OrderStatus>("idle");
   const [toast, setToast] = useState<ToastState>(null);
 
@@ -181,7 +188,7 @@ export function ServicesSection() {
       </Reveal>
 
       <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        {services.map((service, index) => (
+        {displayServices.map((service, index) => (
           <Reveal key={service.title} delay={index * 0.05}>
             <Card className="flex h-full flex-col rounded-[30px] p-6">
               <p className="text-xs uppercase tracking-[0.24em] text-cyan-300">Service</p>

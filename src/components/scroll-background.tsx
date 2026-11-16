@@ -20,7 +20,7 @@ export function ScrollBackground({ variant = "home" }: ScrollBackgroundProps) {
   return (
     <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
       <motion.div style={{ y: gridY }} className="absolute inset-0 opacity-[0.1]">
-        <div className="h-full w-full bg-[linear-gradient(rgba(148,163,184,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.15)_1px,transparent_1px)] bg-size-[112px_112px] mask-[radial-gradient(circle_at_center,black,transparent_92%)]" />
+        <div className="h-full w-full bg-[linear-gradient(rgba(148,163,184,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.15)_1px,transparent_1px)] [background-size:112px_112px] [mask-image:radial-gradient(circle_at_center,black,transparent_92%)] [-webkit-mask-image:radial-gradient(circle_at_center,black,transparent_92%)]" />
       </motion.div>
 
       <motion.div
