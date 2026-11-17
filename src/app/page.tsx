@@ -375,28 +375,28 @@ export default async function Home() {
 
         {/* Contact Section */}
         <SectionShell id="contact">
-          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
+          <div className="grid gap-5 sm:gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
             <Reveal>
-              <Card className="h-full rounded-3xl border-white/8 bg-slate-950/60 p-6 sm:p-8">
+              <Card className="h-full rounded-[24px] sm:rounded-3xl border-white/8 bg-slate-950/60 p-4 sm:p-7 lg:p-8">
                 <SectionHeading
                   eyebrow="Direct Inquiry"
                   title="Let's build your next high-converting platform"
                   description="Share your requirements, budget, or timeline. I reply to all client inquiries within 24 hours."
                 />
-                <div className="mt-8">
+                <div className="mt-6 sm:mt-8">
                   <ContactForm />
                 </div>
               </Card>
             </Reveal>
 
             <Reveal delay={0.06}>
-              <Card className="h-full flex flex-col justify-between rounded-3xl border-white/8 bg-slate-950/60 p-6 sm:p-8">
+              <Card className="h-full flex flex-col justify-between rounded-[24px] sm:rounded-3xl border-white/8 bg-slate-950/60 p-4 sm:p-7 lg:p-8">
                 <div>
                   <SectionHeading
                     eyebrow="Direct Channels"
                     title="Get in touch directly"
                   />
-                  <div className="mt-8 space-y-3">
+                  <div className="mt-6 sm:mt-8 space-y-2.5 sm:space-y-3">
                     {[
                       { icon: Mail, value: profile.contactEmail, label: "Email", href: `mailto:${profile.contactEmail}` },
                       { icon: ShieldCheck, value: profile.linkedinUrl, label: "LinkedIn", href: profile.linkedinUrl },
@@ -406,22 +406,22 @@ export default async function Home() {
                         href={href}
                         target={href.startsWith("http") ? "_blank" : undefined}
                         rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="flex items-center gap-4 rounded-2xl border border-white/8 bg-slate-900/60 p-4 transition hover:border-cyan-400/30"
+                        className="flex items-center gap-3.5 sm:gap-4 rounded-2xl border border-white/8 bg-slate-900/60 p-3 sm:p-4 transition hover:border-cyan-400/30"
                       >
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-300">
-                          <ItemIcon className="h-5 w-5" />
+                        <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-300 shrink-0">
+                          <ItemIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-[11px] uppercase tracking-wider text-slate-400">{label}</p>
-                          <p className="mt-0.5 truncate text-sm font-medium text-white">{value}</p>
+                          <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-400">{label}</p>
+                          <p className="mt-0.5 truncate text-xs sm:text-sm font-medium text-white">{value}</p>
                         </div>
                       </a>
                     ))}
                   </div>
                 </div>
 
-                <div className="mt-8 rounded-2xl border border-cyan-400/20 bg-cyan-950/30 p-5">
-                  <p className="text-xs font-bold uppercase tracking-wider text-cyan-300">Client Guarantee</p>
+                <div className="mt-6 sm:mt-8 rounded-2xl border border-cyan-400/20 bg-cyan-950/30 p-4 sm:p-5">
+                  <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-cyan-300">Client Guarantee</p>
                   <p className="mt-1 text-xs leading-5 text-slate-300">
                     Transparent pricing • Full intellectual property rights on delivery • 14 days free support after deployment.
                   </p>
