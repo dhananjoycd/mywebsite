@@ -13,7 +13,6 @@ import {
   Sparkles,
   KeyRound
 } from "lucide-react";
-import { AdminSignoutButton } from "@/components/admin-signout-button";
 
 const navItems = [
   { label: "Overview", href: "/admin", icon: LayoutDashboard },
@@ -51,9 +50,6 @@ export function AdminNav() {
         );
       })}
 
-      <div className="ml-auto flex items-center gap-2 pl-2">
-        <AdminSignoutButton />
-      </div>
     </nav>
   );
 }

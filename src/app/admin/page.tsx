@@ -22,7 +22,6 @@ import {
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import AdminLayoutShell from "@/components/admin-shell";
-import { AdminSignoutButton } from "@/components/admin-signout-button";
 
 export const dynamic = "force-dynamic";
 
@@ -154,8 +153,6 @@ export default async function AdminDashboardPage() {
             <ExternalLink className="h-3.5 w-3.5 text-cyan-400" />
             Preview Portfolio
           </Link>
-
-          <AdminSignoutButton />
         </div>
       </div>
 

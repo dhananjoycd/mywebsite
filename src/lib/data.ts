@@ -12,6 +12,11 @@ export type ProfileData = {
   contactEmail: string;
   linkedinUrl: string;
   githubUrl: string;
+  facebookUrl?: string;
+  youtubeUrl?: string;
+  twitterUrl?: string;
+  footerBio?: string;
+  footerCopyright?: string;
 };
 
 export const DEFAULT_PROFILE: ProfileData = {
@@ -30,6 +35,11 @@ export const DEFAULT_PROFILE: ProfileData = {
   contactEmail: "dhananjoychandradas@gmail.com",
   linkedinUrl: "https://www.linkedin.com/in/dhananjoycd",
   githubUrl: "https://github.com/dhananjoycd",
+  facebookUrl: "https://facebook.com/dhananjoycd",
+  youtubeUrl: "https://youtube.com/@dhananjoycd",
+  twitterUrl: "https://x.com/dhananjoycd",
+  footerBio: "Full-Stack Web Developer & Educator. Building scalable platforms with Next.js, PostgreSQL, and modern motion.",
+  footerCopyright: "Dhananjoy Chandra Das. All rights reserved.",
 };
 
 export const DEFAULT_SKILL_GROUPS = [
@@ -376,6 +386,11 @@ export async function getProfileData(): Promise<ProfileData> {
       contactEmail: map.get("contactEmail") || DEFAULT_PROFILE.contactEmail,
       linkedinUrl: map.get("linkedinUrl") || DEFAULT_PROFILE.linkedinUrl,
       githubUrl: map.get("githubUrl") || DEFAULT_PROFILE.githubUrl,
+      facebookUrl: map.get("facebookUrl") || DEFAULT_PROFILE.facebookUrl,
+      youtubeUrl: map.get("youtubeUrl") || DEFAULT_PROFILE.youtubeUrl,
+      twitterUrl: map.get("twitterUrl") || DEFAULT_PROFILE.twitterUrl,
+      footerBio: map.get("footerBio") || DEFAULT_PROFILE.footerBio,
+      footerCopyright: map.get("footerCopyright") || DEFAULT_PROFILE.footerCopyright,
     };
   } catch (error) {
     console.error("Error fetching profile settings:", error);
