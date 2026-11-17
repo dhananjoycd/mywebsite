@@ -51,10 +51,20 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     setActiveImgIndex((prev) => (prev - 1 + imageList.length) % imageList.length);
   };
 
+  const handleDoubleClick = () => {
+    if (project.liveClientUrl && project.liveClientUrl !== "#") {
+      window.open(project.liveClientUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
     <Card className="group flex h-full flex-col justify-between overflow-hidden rounded-[26px] border-white/10 bg-slate-950/70 p-0 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/40 hover:shadow-[0_12px_35px_rgba(34,211,238,0.12)]">
-      {/* Top Image Viewport (Fixed Aspect Ratio for Consistency) */}
-      <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-slate-900 border-b border-white/8">
+      {/* Top Image Viewport (Fixed Aspect Ratio with Double-click to open Demo) */}
+      <div 
+        onDoubleClick={handleDoubleClick}
+        title={project.liveClientUrl && project.liveClientUrl !== "#" ? "Double click to open live demo 🚀" : undefined}
+        className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-slate-900 border-b border-white/8 cursor-pointer select-none"
+      >
         <Image
           src={imageList[activeImgIndex] || project.image}
           alt={project.name}
