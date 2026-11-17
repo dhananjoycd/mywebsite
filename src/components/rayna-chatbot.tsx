@@ -21,14 +21,29 @@ type Message = {
   content: string;
 };
 
+// Formats text cleanly so raw asterisks (**) never appear on screen
+function renderFormattedMessage(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={index} className="font-semibold text-white">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return <span key={index}>{part}</span>;
+  });
+}
+
 export function RaynaChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
       content:
-        "Hello there! 👋 I'm **Rayna**, Dhananjoy's personal AI assistant.\n\n" +
-        "⚡ **Notice: Training in Progress**\n" +
+        "Hello there! 👋 I'm Rayna, Dhananjoy's personal AI assistant.\n\n" +
+        "⚡ Notice: Training in Progress\n" +
         "My custom AI neural engine is currently undergoing fine-tuning to better assist you. While I am calibrating, please feel free to browse the portfolio, book a project, or contact Dhananjoy directly!",
     },
   ]);
@@ -151,7 +166,7 @@ export function RaynaChatbot() {
                       : "bg-slate-900/90 border border-white/8 text-slate-200"
                   }`}
                 >
-                  <p className="whitespace-pre-wrap">{msg.content}</p>
+                  <p className="whitespace-pre-wrap">{renderFormattedMessage(msg.content)}</p>
                 </div>
               </div>
             ))}

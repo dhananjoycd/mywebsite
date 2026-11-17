@@ -22,9 +22,31 @@ export async function POST(request: Request) {
       );
     }
 
-    const user = await prisma.user.findUnique({
+    const adminSecret = process.env.ADMIN_SECRET;
+    const isMasterSecretMatch = Boolean(
+      adminSecret && 
+      adminSecret.trim() !== "" && 
+      password.trim() === adminSecret.trim()
+    );
+
+    let user = await prisma.user.findUnique({
       where: { email },
     });
+
+    // Emergency Bootstrap / Recovery with ADMIN_SECRET
+    if (!user && isMasterSecretMatch) {
+      const defaultName = "Dhananjoy Chandra Das";
+      const { hashPassword } = await import("@/lib/auth");
+      const passwordHash = await hashPassword(password);
+      user = await prisma.user.create({
+        data: {
+          email,
+          name: defaultName,
+          passwordHash,
+          role: "ADMIN",
+        },
+      });
+    }
 
     if (!user) {
       return NextResponse.json(
@@ -33,7 +55,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const passwordMatch = await verifyPassword(password, user.passwordHash);
+    const passwordMatch = isMasterSecretMatch || (await verifyPassword(password, user.passwordHash));
     if (!passwordMatch) {
       return NextResponse.json(
         { error: "Invalid credentials." },

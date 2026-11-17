@@ -10,8 +10,10 @@ import {
   Settings, 
   LayoutDashboard,
   GraduationCap,
-  Sparkles
+  Sparkles,
+  KeyRound
 } from "lucide-react";
+import { AdminSignoutButton } from "@/components/admin-signout-button";
 
 const navItems = [
   { label: "Overview", href: "/admin", icon: LayoutDashboard },
@@ -21,6 +23,7 @@ const navItems = [
   { label: "Blog", href: "/admin/blog", icon: BookOpen },
   { label: "Skills", href: "/admin/skills", icon: Sparkles },
   { label: "Timeline", href: "/admin/timeline", icon: GraduationCap },
+  { label: "Security", href: "/admin/security", icon: KeyRound },
   { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
@@ -47,6 +50,10 @@ export function AdminNav() {
           </Link>
         );
       })}
+
+      <div className="ml-auto flex items-center gap-2 pl-2">
+        <AdminSignoutButton />
+      </div>
     </nav>
   );
 }

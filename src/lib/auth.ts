@@ -76,3 +76,26 @@ export async function requireAdminSession(): Promise<AdminSessionPayload> {
   return session;
 }
 
+export async function createPasswordResetToken(email: string): Promise<string> {
+  const secret = getJwtSecret();
+  return new SignJWT({ email, type: "admin_password_reset" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("15m")
+    .sign(secret);
+}
+
+export async function verifyPasswordResetToken(token: string): Promise<string | null> {
+  try {
+    const secret = getJwtSecret();
+    const { payload } = await jwtVerify(token, secret);
+    if (payload.type !== "admin_password_reset" || !payload.email) {
+      return null;
+    }
+    return payload.email as string;
+  } catch {
+    return null;
+  }
+}
+
+
