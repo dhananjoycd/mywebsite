@@ -4,7 +4,13 @@ const REQUIRED_CONFIG_MESSAGE = "Email service is not configured.";
 
 function getEnvValue(key: string) {
   const value = process.env[key];
-  return typeof value === "string" ? value.trim() : "";
+  if (typeof value !== "string") return "";
+  const trimmed = value.trim();
+  // If it's the app password, strip internal spaces commonly copied from Google App Passwords
+  if (key === "SMTP_PASS") {
+    return trimmed.replace(/\s+/g, "");
+  }
+  return trimmed;
 }
 
 export function getMailerConfig() {

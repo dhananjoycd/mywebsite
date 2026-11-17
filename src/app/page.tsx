@@ -1,12 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  BookOpen,
-  BriefcaseBusiness,
   Download,
-  GraduationCap,
+  Eye,
   Mail,
+  ShieldCheck,
+  CheckCircle2,
 } from "lucide-react";
 
 import { ClickRipple } from "@/components/click-ripple";
@@ -16,6 +15,8 @@ import { HeroTyping } from "@/components/hero-typing";
 import { Reveal } from "@/components/reveal";
 import { ScrollBackground } from "@/components/scroll-background";
 import { ServicesSection } from "@/components/services-section";
+import { ProjectsSection } from "@/components/projects-section";
+import { TimelineSection } from "@/components/timeline-section";
 import { SectionHeading } from "@/components/section-heading";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -31,14 +32,6 @@ import {
 
 export const dynamic = "force-dynamic";
 
-function GitHubMark(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.1.82-.26.82-.58v-2.03c-3.34.73-4.04-1.42-4.04-1.42-.54-1.4-1.33-1.77-1.33-1.77-1.09-.76.08-.75.08-.75 1.2.09 1.84 1.25 1.84 1.25 1.08 1.86 2.82 1.32 3.5 1.01.11-.79.42-1.32.76-1.63-2.67-.31-5.47-1.36-5.47-6.04 0-1.33.46-2.41 1.22-3.26-.12-.31-.53-1.56.12-3.24 0 0 1-.33 3.3 1.24a11.3 11.3 0 0 1 6 0c2.29-1.57 3.29-1.24 3.29-1.24.65 1.68.24 2.93.12 3.24.76.85 1.22 1.93 1.22 3.26 0 4.69-2.8 5.73-5.48 6.03.43.38.81 1.1.81 2.22v3.29c0 .32.22.69.82.58A12 12 0 0 0 12 .5Z" />
-    </svg>
-  );
-}
-
 function SectionShell({
   id,
   children,
@@ -53,10 +46,34 @@ function SectionShell({
   return (
     <section
       id={id}
-      className={`scroll-mt-28 ${compact ? "py-8 sm:py-10 lg:py-12" : "py-12 sm:py-16 lg:py-20"} ${className}`}
+      className={`scroll-mt-24 ${compact ? "py-6 sm:py-8 lg:py-10" : "py-10 sm:py-14 lg:py-18"} ${className}`}
     >
       {children}
     </section>
+  );
+}
+
+// Point 1: Custom Animated Circular Social Icons
+function SocialCircle({
+  href,
+  label,
+  children,
+}: {
+  href: string;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="group relative flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/10 bg-slate-900/80 p-2 text-slate-300 transition duration-300 hover:scale-110 hover:border-cyan-400/50 hover:text-white"
+    >
+      <span className="absolute -inset-0.5 rounded-full bg-cyan-400/20 opacity-0 blur-sm transition duration-300 group-hover:opacity-100" />
+      <span className="relative z-10">{children}</span>
+    </a>
   );
 }
 
@@ -82,9 +99,9 @@ export default async function Home() {
   const currentYear = new Date().getFullYear();
   const yearsExperience = Math.max(1, currentYear - (profile.experienceStartYear || 2023) + 1);
   const heroStats = [
-    [String(projects.length), "Featured Projects"],
+    [String(projects.length), "Completed Projects"],
     [`${yearsExperience}+`, "Years Practice"],
-    [profile.responseTime || "24/7", "Typical Reply Time"],
+    [profile.responseTime || "24/7", "Reply Turnaround"],
   ] as const;
 
   return (
@@ -92,61 +109,112 @@ export default async function Home() {
       <ScrollBackground variant="home" />
       <ClickRipple />
 
-      <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-28 sm:px-6 sm:pt-32 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-24 sm:px-6 sm:pt-28 lg:px-8">
+        {/* Hero Section */}
         <SectionShell id="home" compact>
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1.03fr)_minmax(320px,0.92fr)] lg:items-center">
-            <Reveal delay={0.12} className="flex flex-col items-center justify-center gap-5">
+          <div className="flex flex-col items-center gap-8 lg:grid lg:grid-cols-[minmax(0,1.03fr)_minmax(320px,0.92fr)] lg:items-center">
+            {/* Left Column: Photo & Orbit */}
+            <Reveal delay={0.12} className="flex flex-col items-center justify-center gap-3 w-full">
               <HeroOrbit />
-              <div className="w-full max-w-152 rounded-[30px] px-5 py-4 text-center shadow-[0_18px_55px_rgba(0,0,0,0.26)] backdrop-blur-xl sm:px-6 sm:py-5 lg:text-center">
-                <p className="text-center text-sm font-semibold leading-7 tracking-[0.12em] text-cyan-50 sm:text-[0.95rem] lg:leading-8">
+
+              {/* Status Pill Card */}
+              <div className="w-full max-w-sm sm:max-w-md rounded-[24px] sm:rounded-[28px] border border-cyan-400/20 bg-slate-950/60 px-4 py-3 sm:px-5 sm:py-3.5 text-center shadow-[0_18px_55px_rgba(0,0,0,0.3)] backdrop-blur-xl">
+                <p className="text-center text-xs sm:text-sm font-semibold leading-relaxed tracking-wide text-cyan-50">
                   {profile.heroLabel}
                 </p>
-                <div className="mt-4 flex justify-center">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-200">
-                    <span className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.75)]" />
+                <div className="mt-2 flex justify-center">
+                  <span className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-0.5 sm:px-3.5 sm:py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-emerald-200">
+                    <span className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.75)] animate-pulse" />
                     {profile.availabilityLabel}
                   </span>
                 </div>
               </div>
             </Reveal>
-            <Reveal className="flex flex-col items-center text-center lg:items-start lg:text-left">
-              <div className="space-y-5 sm:space-y-6">
-                <h1 className="mx-auto max-w-3xl font-display text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl lg:mx-0 lg:text-4xl">
-                  <span className="block text-slate-100">Hello! I&apos;m {profile.name}</span>
+
+            {/* Right Column: Bio, Short 3 CTAs, & Social Media Underneath */}
+            <Reveal className="flex flex-col items-center text-center lg:items-start lg:text-left w-full">
+              <div className="space-y-3 sm:space-y-4">
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-0.5 text-xs font-semibold text-cyan-300">
+                  <ShieldCheck className="h-3.5 w-3.5" /> 100% Milestone Delivery Guarantee
+                </div>
+
+                <h1 className="mx-auto max-w-3xl font-display text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:mx-0 lg:text-5xl">
+                  <span className="block text-slate-100">Hello, I&apos;m {profile.name}</span>
                   <HeroTyping
                     items={profile.rotatingRoles}
-                    className="mt-3 inline-flex min-h-[1.15em] min-w-[14ch] items-center whitespace-nowrap text-cyan-300"
+                    className="mt-1.5 inline-flex min-h-[1.15em] min-w-[14ch] items-center whitespace-nowrap text-cyan-300 text-xl sm:text-3xl lg:text-4xl"
                   />
                 </h1>
 
-                <p className="mx-auto max-w-2xl text-sm leading-7 text-slate-300 sm:text-base sm:leading-8 lg:mx-0 lg:text-lg">
+                <p className="mx-auto max-w-2xl text-xs sm:text-sm leading-6 sm:leading-7 text-slate-300 sm:text-base lg:mx-0">
                   {profile.bio}
                 </p>
               </div>
 
-              <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
-                <Link href="#projects">
-                  <Button size="lg">
-                    View Projects
+              {/* Point 1: Short Meaningful 3 CTAs (Hire Me, Projects, Resume) */}
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 lg:justify-start">
+                <Link href="#services">
+                  <Button size="lg" className="rounded-full shadow-lg shadow-cyan-400/20 font-bold gap-1.5 bg-cyan-400 text-slate-950 hover:bg-cyan-300 px-5 text-xs sm:text-sm h-10 sm:h-11">
+                    Hire Me
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
+
+                <Link href="#projects">
+                  <Button size="lg" variant="secondary" className="rounded-full gap-1.5 border border-white/10 px-5 text-xs sm:text-sm h-10 sm:h-11">
+                    <Eye className="h-4 w-4 text-cyan-400" />
+                    Projects
+                  </Button>
+                </Link>
+
                 <a
                   href={profile.resumeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 text-sm font-semibold text-slate-100 transition-all duration-500 ease-out hover:-translate-y-1 hover:border-cyan-400/30 hover:bg-white/10 hover:shadow-[0_12px_28px_rgba(2,6,23,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80"
+                  className="inline-flex h-10 sm:h-11 items-center justify-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-5 text-xs sm:text-sm font-semibold text-slate-100 transition duration-300 hover:border-cyan-400/40 hover:bg-white/10"
                 >
-                  Download Resume
+                  Resume
                   <Download className="h-4 w-4" />
                 </a>
               </div>
 
-              <div className="mt-8 grid w-full max-w-2xl gap-4 sm:grid-cols-3 lg:mx-0">
+              {/* Point 1: Social Media Icons Centered Right Below the 3 CTAs */}
+              <div className="mt-5 flex items-center justify-center lg:justify-start gap-3 w-full">
+                {/* GitHub */}
+                <SocialCircle href={profile.githubUrl || "https://github.com/dhananjoycd"} label="GitHub">
+                  <svg className="h-4 w-4 sm:h-5 sm:w-5 fill-current" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                  </svg>
+                </SocialCircle>
+
+                {/* LinkedIn */}
+                <SocialCircle href={profile.linkedinUrl || "https://linkedin.com/in/dhananjoycd"} label="LinkedIn">
+                  <svg className="h-4 w-4 sm:h-5 sm:w-5 fill-current text-sky-400" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                  </svg>
+                </SocialCircle>
+
+                {/* Facebook */}
+                <SocialCircle href="https://facebook.com/dhananjoycd" label="Facebook">
+                  <svg className="h-4 w-4 sm:h-5 sm:w-5 fill-current text-blue-500" viewBox="0 0 24 24">
+                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                  </svg>
+                </SocialCircle>
+
+                {/* YouTube */}
+                <SocialCircle href="https://youtube.com/@dhananjoycd" label="YouTube">
+                  <svg className="h-4 w-4 sm:h-5 sm:w-5 fill-current text-rose-500" viewBox="0 0 24 24">
+                    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                  </svg>
+                </SocialCircle>
+              </div>
+
+              {/* Hero Stats */}
+              <div className="mt-7 grid w-full max-w-2xl grid-cols-3 gap-2 sm:gap-3 lg:mx-0">
                 {heroStats.map(([value, label]) => (
-                  <Card key={label} className="rounded-3xl px-5 py-4">
-                    <p className="font-display text-xl font-semibold text-white sm:text-2xl">{value}</p>
-                    <p className="mt-1 text-sm text-slate-400">{label}</p>
+                  <Card key={label} className="rounded-2xl border-white/8 bg-slate-950/60 p-2.5 sm:p-4 text-center">
+                    <p className="font-display text-lg sm:text-2xl font-bold text-white">{value}</p>
+                    <p className="mt-0.5 text-[10px] sm:text-xs text-slate-400">{label}</p>
                   </Card>
                 ))}
               </div>
@@ -154,62 +222,55 @@ export default async function Home() {
           </div>
         </SectionShell>
 
+        {/* About Section */}
         <SectionShell id="about">
           <Reveal>
             <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-              <Card className="p-6 sm:p-8">
+              <Card className="rounded-3xl border-white/8 bg-slate-950/60 p-6 sm:p-8">
                 <SectionHeading
-                  eyebrow="About Me"
-                  title="A Full Stack Web Developer with a research mindset"
-                  description="I build practical, scalable web applications and bring a structured, problem-solving mindset to both software and research."
+                  eyebrow="Engineering Mindset"
+                  title="Mathematics-driven precision meets modern web development"
+                  description="I turn complex logic into structured, beautiful, and scalable user interfaces that convert users into long-term clients."
                 />
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   {[
-                    "B.Sc. (Hons.) in Mathematics at the University of Rajshahi",
-                    "Full stack web development for business and organizational platforms",
-                    "Biomathematics research with modeling and computational methods",
-                    "Focused on clear UX, stable structure, and real-world usefulness",
+                    "B.Sc. (Hons.) Mathematics at University of Rajshahi",
+                    "Full stack web development for scalable enterprise apps",
+                    "Biomathematics research with mathematical modeling",
+                    "Production-ready architecture, clean UI, & zero bloat",
                   ].map((item) => (
                     <div
                       key={item}
-                      className="rounded-2xl border border-white/8 bg-slate-950/35 px-4 py-3 text-sm leading-6 text-slate-200"
+                      className="rounded-2xl border border-white/8 bg-slate-900/60 px-4 py-3 text-xs leading-5 text-slate-200 flex items-center gap-2.5"
                     >
-                      {item}
+                      <CheckCircle2 className="h-4 w-4 shrink-0 text-cyan-400" />
+                      <span>{item}</span>
                     </div>
                   ))}
                 </div>
-                <p className="mt-6 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-                  My background in Mathematics gives me a strong foundation in analytical thinking and structured problem-solving. I apply this mindset to web development, focusing on building applications that are efficient, maintainable, and valuable in real-world use cases.
-                </p>
               </Card>
 
-              <Card className="grid gap-4 p-5 sm:gap-5 sm:p-6 lg:p-8">
-                <div className="rounded-3xl border border-cyan-400/10 bg-slate-950/35 p-4 sm:p-5">
-                  <p className="text-[11px] uppercase tracking-[0.24em] text-cyan-300 sm:text-xs">
-                    What I Build
+              <Card className="grid gap-4 rounded-3xl border-white/8 bg-slate-950/60 p-6 lg:p-8">
+                <div className="rounded-2xl border border-cyan-400/10 bg-slate-900/60 p-5">
+                  <p className="text-xs uppercase tracking-[0.24em] text-cyan-300 font-semibold">
+                    What I Deliver
                   </p>
-                  <h3 className="mt-3 font-display text-lg font-medium text-white sm:text-xl">
-                    Building Scalable Web Applications
+                  <h3 className="mt-2 font-display text-lg font-bold text-white">
+                    High Performance Web Platforms
                   </h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-300 sm:leading-7">
-                    I develop full-stack web applications that are fast, responsive, and built for real-world use. From dashboards to e-commerce platforms, I focus on creating solutions that deliver both performance and usability.
-                  </p>
-                  <p className="mt-4 text-[11px] uppercase tracking-[0.22em] text-slate-500 sm:text-xs">
-                    Next.js • React.js • TypeScript • FULL-STACK
+                  <p className="mt-2 text-xs leading-6 text-slate-300">
+                    Fast, responsive, and secure full-stack applications. From customer portals to e-commerce, I build solutions with high conversion and clean maintainability in mind.
                   </p>
                 </div>
-                <div className="rounded-3xl border border-white/8 bg-slate-950/35 p-4 sm:p-5">
-                  <p className="text-[11px] uppercase tracking-[0.24em] text-cyan-300 sm:text-xs">
-                    How I Work
+                <div className="rounded-2xl border border-white/8 bg-slate-900/60 p-5">
+                  <p className="text-xs uppercase tracking-[0.24em] text-cyan-300 font-semibold">
+                    Workflow & Turnaround
                   </p>
-                  <h3 className="mt-3 font-display text-lg font-medium text-white sm:text-xl">
-                    Clean Process, Reliable Results
+                  <h3 className="mt-2 font-display text-lg font-bold text-white">
+                    Milestone Progress & Direct Communication
                   </h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-300 sm:leading-7">
-                    My workflow is focused on clarity, structure, and efficiency. I write clean, maintainable code, design intuitive user experiences, and ensure performance across all devices.
-                  </p>
-                  <p className="mt-4 text-[11px] uppercase tracking-[0.22em] text-slate-500 sm:text-xs">
-                    CLEAN CODE • Usability • Performance
+                  <p className="mt-2 text-xs leading-6 text-slate-300">
+                    Direct access to staging links, rapid revisions, automated tracking codes, and complete transparency from inception to deployment.
                   </p>
                 </div>
               </Card>
@@ -217,6 +278,7 @@ export default async function Home() {
           </Reveal>
         </SectionShell>
 
+        {/* Commercial Services & Pricing */}
         <SectionShell id="services">
           <ServicesSection
             initialServices={services.map((s) => ({
@@ -229,24 +291,25 @@ export default async function Home() {
           />
         </SectionShell>
 
+        {/* Skills Section */}
         <SectionShell id="skills">
           <Reveal>
             <SectionHeading
-              eyebrow="Skills"
-              title="A modern stack with room to scale"
-              description="Built around your chosen tools, while keeping the architecture clean enough for future backend growth."
+              eyebrow="Core Competencies"
+              title="A battle-tested stack with room to scale"
+              description="Modern frameworks, robust typing, and enterprise styling standards tailored for high-speed products."
             />
           </Reveal>
-          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {skillGroups.map((group, index) => (
               <Reveal key={group.title} delay={index * 0.05}>
-                <Card className="h-full p-6">
-                  <h3 className="font-display text-lg font-medium text-white">{group.title}</h3>
-                  <div className="mt-4 flex flex-wrap gap-2">
+                <Card className="h-full rounded-2xl border-white/8 bg-slate-950/60 p-5 hover:border-cyan-400/25 transition">
+                  <h3 className="font-display text-sm font-bold text-white">{group.title}</h3>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
                     {group.items.map((item) => (
                       <span
                         key={item}
-                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200"
+                        className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-medium text-slate-300"
                       >
                         {item}
                       </span>
@@ -258,281 +321,30 @@ export default async function Home() {
           </div>
         </SectionShell>
 
-        <SectionShell id="experience">
-          <div className="grid gap-6">
-            <Reveal>
-              <Card className="p-6 sm:p-8">
-                <SectionHeading
-                  eyebrow="Education"
-                  title="My Academic Journey"
-                  description="A concise view of the academic background that supports my development work, research interests, and analytical approach to solving real problems."
-                />
-                <div className="mt-6 space-y-5">
-                  {academicItems.map((item) => (
-                    <div
-                      key={item.title}
-                      className="rounded-[30px] border border-white/8 bg-slate-950/35 p-5 sm:p-6"
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/10 p-3 text-cyan-300">
-                          <GraduationCap className="h-5 w-5" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                            <div>
-                              <h3 className="font-display text-xl font-medium text-white">
-                                {item.title}
-                              </h3>
-                              <p className="mt-2 text-sm font-medium text-cyan-200">
-                                {item.institution}
-                              </p>
-                            </div>
-                            <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-slate-400">
-                              {item.period}
-                            </span>
-                          </div>
-
-                          <p className="mt-4 text-sm leading-7 text-slate-300">
-                            {item.summary}
-                          </p>
-
-                          <div className="mt-5 space-y-3">
-                            {item.highlights.map((highlight) => (
-                              <div
-                                key={highlight}
-                                className="flex items-start gap-3 rounded-2xl border border-white/6 bg-white/2 px-4 py-3"
-                              >
-                                <span className="mt-1 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.55)]" />
-                                <p className="text-sm leading-6 text-slate-200">
-                                  {highlight}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-
-                          {item.meta && (
-                            <div className="mt-5 rounded-2xl border border-cyan-400/12 bg-cyan-400/8 px-4 py-3">
-                              <p className="text-[11px] uppercase tracking-[0.22em] text-cyan-200/80">
-                                Academic Note
-                              </p>
-                              <p className="mt-2 text-sm text-cyan-50">
-                                {item.meta}
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </Reveal>
-
-            <Reveal delay={0.05}>
-              <Card className="p-6 sm:p-8">
-                <SectionHeading
-                  eyebrow="Experience"
-                  title="Practical work shaped by building, teaching, and research"
-                  description="A blend of software development, mathematics instruction, and research-driven exploration that reflects both technical execution and clear communication."
-                />
-                <div className="mt-6 space-y-4">
-                  {experiences.map((item) => (
-                    <div
-                      key={item.title}
-                      className={`rounded-[30px] border p-5 sm:p-6 ${
-                        item.featured
-                          ? "border-cyan-400/18 bg-[linear-gradient(180deg,rgba(34,211,238,0.10),rgba(2,6,23,0.32))]"
-                          : "border-white/8 bg-slate-950/35"
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div
-                          className={`rounded-2xl border p-2.5 ${
-                            item.featured
-                              ? "border-cyan-400/20 bg-cyan-400/12 text-cyan-200"
-                              : "border-cyan-400/15 bg-cyan-400/10 text-cyan-300"
-                          }`}
-                        >
-                          <BriefcaseBusiness className="h-5 w-5" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                            <div>
-                              <h3 className="font-display text-xl font-medium text-white">
-                                {item.title}
-                              </h3>
-                              {item.featured ? (
-                                <p className="mt-2 text-xs uppercase tracking-[0.22em] text-cyan-300/80">
-                                  Main professional experience
-                                </p>
-                              ) : null}
-                            </div>
-                            <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-slate-400">
-                              {item.period}
-                            </span>
-                          </div>
-                          <p className="mt-4 text-sm leading-7 text-slate-300">
-                            {item.text}
-                          </p>
-                          <div className="mt-5 space-y-3">
-                            {item.highlights.map((highlight) => (
-                              <div
-                                key={highlight}
-                                className="flex items-start gap-3 rounded-2xl border border-white/6 bg-white/2 px-4 py-3"
-                              >
-                                <span className="mt-1 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.55)]" />
-                                <p className="text-sm leading-6 text-slate-200">
-                                  {highlight}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </Reveal>
-          </div>
-        </SectionShell>
-
+        {/* Point 3: Commercial Projects Showcase with Equal Height Cards */}
         <SectionShell id="projects">
-          <Reveal>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <SectionHeading
-                eyebrow="Projects"
-                title="Selected work with practical structure"
-                description="Each project is presented with clear purpose, balanced layout, and real-world UI thinking."
-              />
-              <Link href="#contact" className="inline-flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-white">
-                Start a conversation
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </Reveal>
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
-            {projects.map((project, index) => (
-              <Reveal key={project.name} delay={index * 0.06}>
-                <Card className="flex h-full flex-col overflow-hidden rounded-[30px] border-white/10 bg-slate-950/45 transition hover:-translate-y-1 hover:border-cyan-400/18">
-                  <div className="aspect-[16/10] border-b border-white/8 bg-[linear-gradient(180deg,rgba(34,211,238,0.10),rgba(15,23,42,0.1)),linear-gradient(135deg,#0f172a,#020617)] p-4">
-                    <div className="relative h-full overflow-hidden rounded-[22px] border border-white/10 bg-slate-950/35">
-                      <Image
-                        src={project.image}
-                        alt={`${project.name} project preview`}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 33vw"
-                        className="object-cover"
-                      />
-                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.10),rgba(2,6,23,0.46))]" />
-                      <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
-                        <span className="inline-flex rounded-full border border-cyan-400/18 bg-slate-950/70 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-cyan-200 backdrop-blur-sm">
-                          {project.tone}
-                        </span>
-                        <span className="text-xs uppercase tracking-[0.25em] text-slate-300">
-                          0{index + 1}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-1 flex-col p-5 sm:p-6">
-                    <div>
-                      <h3 className="font-display text-[1.45rem] font-medium leading-tight text-white">
-                        {project.name}
-                      </h3>
-                      <p className="mt-4 text-sm leading-7 text-slate-300">
-                        {project.summary}
-                      </p>
-                    </div>
-                    <div className="mt-5 space-y-3">
-                      {project.highlights.map((highlight) => (
-                        <div
-                          key={highlight}
-                          className="flex items-start gap-3 rounded-2xl border border-white/6 bg-white/[0.02] px-4 py-3"
-                        >
-                          <span className="mt-1 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.55)]" />
-                          <p className="text-sm leading-6 text-slate-200">
-                            {highlight}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {project.stack.map((item) => (
-                        <span key={item} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300">
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="mt-auto space-y-3 pt-6">
-                      {project.liveClientUrl && project.liveClientUrl !== "#" ? (
-                        <a
-                          href={project.liveClientUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex w-full"
-                        >
-                          <Button className="w-full">
-                            Live Client
-                            <ArrowRight className="h-4 w-4" />
-                          </Button>
-                        </a>
-                      ) : (
-                        <Button className="w-full opacity-60" disabled>
-                          Live Client
-                          <ArrowRight className="h-4 w-4" />
-                        </Button>
-                      )}
-
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        {[
-                          { label: "Client", href: project.githubClientUrl },
-                          { label: "Server", href: project.githubServerUrl },
-                        ].map((linkItem) =>
-                          linkItem.href && linkItem.href !== "#" ? (
-                            <a
-                              key={linkItem.label}
-                              href={linkItem.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex"
-                            >
-                              <Button variant="secondary" className="w-full">
-                                <GitHubMark className="h-4 w-4" />
-                                {linkItem.label}
-                              </Button>
-                            </a>
-                          ) : (
-                            <Button
-                              key={linkItem.label}
-                              variant="secondary"
-                              className="w-full opacity-60"
-                              disabled
-                            >
-                              <GitHubMark className="h-4 w-4" />
-                              {linkItem.label}
-                            </Button>
-                          ),
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              </Reveal>
-            ))}
-          </div>
+          <ProjectsSection projects={projects} />
         </SectionShell>
 
+        {/* Modern Vertical Timeline (Experience & Education) */}
+        <SectionShell id="timeline">
+          <TimelineSection
+            experiences={experiences}
+            educations={academicItems}
+          />
+        </SectionShell>
+
+        {/* Blog Preview Section */}
         <SectionShell id="blog">
           <Reveal>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <SectionHeading
-                eyebrow="Blog"
-                title="Writing that can grow with the portfolio"
-                description="A clean content section helps show process, technical thinking, and communication skills without cluttering the homepage."
+                eyebrow="Technical Writing"
+                title="Engineering notes, design systems, & architecture"
+                description="Writing that shows problem-solving clarity, frontend choices, and systems thinking."
               />
               <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-white">
-                Open blog page
+                View all articles
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -540,18 +352,20 @@ export default async function Home() {
           <div className="mt-8 grid gap-5 lg:grid-cols-2">
             {blogPosts.slice(0, 2).map((post, index) => (
               <Reveal key={post.slug || post.title} delay={index * 0.05}>
-                <Card className="h-full p-6 transition hover:-translate-y-1 hover:border-white/15">
-                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">
-                    {post.category} • {post.readTime}
-                  </p>
-                  <h3 className="mt-4 font-display text-2xl font-medium text-white">{post.title}</h3>
-                  <p className="mt-4 text-sm leading-7 text-slate-300">{post.excerpt}</p>
+                <Card className="flex h-full flex-col justify-between rounded-3xl border-white/8 bg-slate-950/60 p-6 transition hover:border-cyan-400/30">
+                  <div>
+                    <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-0.5 text-[11px] font-semibold uppercase text-cyan-300">
+                      {post.category} • {post.readTime}
+                    </span>
+                    <h3 className="mt-4 font-display text-xl font-bold text-white">{post.title}</h3>
+                    <p className="mt-3 text-xs leading-6 text-slate-300">{post.excerpt}</p>
+                  </div>
                   <Link
                     href={`/blog/${post.slug}`}
-                    className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-cyan-300 transition hover:text-white"
+                    className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-cyan-300 hover:text-white"
                   >
-                    Read more
-                    <ArrowRight className="h-4 w-4" />
+                    Read full article
+                    <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
                 </Card>
               </Reveal>
@@ -559,54 +373,57 @@ export default async function Home() {
           </div>
         </SectionShell>
 
+        {/* Contact Section */}
         <SectionShell id="contact">
-          <div className="grid gap-6 lg:grid-cols-[1fr_0.85fr] lg:items-stretch">
+          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
             <Reveal>
-              <Card className="h-full p-6 sm:p-8">
+              <Card className="h-full rounded-3xl border-white/8 bg-slate-950/60 p-6 sm:p-8">
                 <SectionHeading
-                  eyebrow="Contact"
-                  title="Share your project ideas"
-                  description="If you have an internship, freelance opportunity, or collaboration in mind, send a message and I will get back to you as soon as possible."
+                  eyebrow="Direct Inquiry"
+                  title="Let's build your next high-converting platform"
+                  description="Share your requirements, budget, or timeline. I reply to all client inquiries within 24 hours."
                 />
-                <div className="mt-8 flex-1">
+                <div className="mt-8">
                   <ContactForm />
                 </div>
               </Card>
             </Reveal>
 
             <Reveal delay={0.06}>
-              <Card className="h-full flex flex-col p-6 sm:p-8">
-                <SectionHeading
-                  eyebrow="Direct Contact"
-                  title="Feel Free to Reach Out"
-                />
-                <div className="mt-8 flex-1 space-y-4">
-                  {[
-                    { icon: Mail, value: profile.contactEmail, label: "Email", href: `mailto:${profile.contactEmail}` },
-                    { icon: BriefcaseBusiness, value: profile.linkedinUrl, label: "LinkedIn", href: profile.linkedinUrl },
-                    { icon: BookOpen, value: "dhananjoy.dev/blog", label: "Blog", href: "/blog" },
-                  ].map(({ icon: ItemIcon, value, label, href }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      target={href.startsWith("http") ? "_blank" : undefined}
-                      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                      className="flex items-center gap-4 rounded-3xl border border-white/8 bg-slate-950/35 p-4 transition hover:border-cyan-400/20"
-                    >
-                      <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/10 p-3 text-cyan-300">
-                        <ItemIcon className="h-5 w-5" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{label}</p>
-                        <p className="mt-1 truncate text-sm text-slate-200">{value}</p>
-                      </div>
-                    </a>
-                  ))}
+              <Card className="h-full flex flex-col justify-between rounded-3xl border-white/8 bg-slate-950/60 p-6 sm:p-8">
+                <div>
+                  <SectionHeading
+                    eyebrow="Direct Channels"
+                    title="Get in touch directly"
+                  />
+                  <div className="mt-8 space-y-3">
+                    {[
+                      { icon: Mail, value: profile.contactEmail, label: "Email", href: `mailto:${profile.contactEmail}` },
+                      { icon: ShieldCheck, value: profile.linkedinUrl, label: "LinkedIn", href: profile.linkedinUrl },
+                    ].map(({ icon: ItemIcon, value, label, href }) => (
+                      <a
+                        key={label}
+                        href={href}
+                        target={href.startsWith("http") ? "_blank" : undefined}
+                        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                        className="flex items-center gap-4 rounded-2xl border border-white/8 bg-slate-900/60 p-4 transition hover:border-cyan-400/30"
+                      >
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-300">
+                          <ItemIcon className="h-5 w-5" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[11px] uppercase tracking-wider text-slate-400">{label}</p>
+                          <p className="mt-0.5 truncate text-sm font-medium text-white">{value}</p>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
                 </div>
-                <div className="mt-8 rounded-[28px] border border-cyan-400/15 bg-cyan-400/10 p-5">
-                  <p className="font-medium text-cyan-100">Usually replies within 24 hours.</p>
-                  <p className="mt-2 text-sm leading-7 text-cyan-50/80">
-                    Whether you have a question about my experience, want to discuss a project idea, or just want to say hi, feel free to reach out. I look forward to connecting with you!
+
+                <div className="mt-8 rounded-2xl border border-cyan-400/20 bg-cyan-950/30 p-5">
+                  <p className="text-xs font-bold uppercase tracking-wider text-cyan-300">Client Guarantee</p>
+                  <p className="mt-1 text-xs leading-5 text-slate-300">
+                    Transparent pricing • Full intellectual property rights on delivery • 14 days free support after deployment.
                   </p>
                 </div>
               </Card>
@@ -614,35 +431,18 @@ export default async function Home() {
           </div>
         </SectionShell>
 
-        <footer className="border-t border-white/8 py-5 sm:py-6">
-          <div className="flex flex-col gap-3 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-            <div className="space-y-2">
-              <p>
-                © {currentYear} personal website. All rights reserved by{" "}
-                <a
-                  href={profile.githubUrl || "https://github.com/dhananjoycd"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cyan-300 transition hover:text-white"
-                >
-                  {profile.name}
-                </a>
-              </p>
-            </div>
+        {/* Clean Footer */}
+        <footer className="mt-12 border-t border-white/8 pt-8">
+          <div className="flex flex-col gap-4 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              © {currentYear} {profile.name}. All rights reserved.
+            </p>
             <div className="flex flex-wrap gap-4">
-              {[
-                { label: "Home", href: "#home" },
-                { label: "About", href: "#about" },
-                { label: "Services", href: "#services" },
-                { label: "Skills", href: "#skills" },
-                { label: "Projects", href: "#projects" },
-                { label: "Blog", href: "/blog" },
-                { label: "Contact", href: "#contact" },
-              ].map((item) => (
-                <Link key={item.label} href={item.href} className="transition hover:text-white">
-                  {item.label}
-                </Link>
-              ))}
+              <Link href="#home" className="hover:text-white transition">Home</Link>
+              <Link href="#services" className="hover:text-white transition">Services</Link>
+              <Link href="#projects" className="hover:text-white transition">Works</Link>
+              <Link href="/track-order" className="hover:text-white transition">Track Order</Link>
+              <Link href="/admin" className="hover:text-white transition">Admin Portal</Link>
             </div>
           </div>
         </footer>

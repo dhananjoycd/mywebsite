@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 
-import { HomeFab } from "@/components/home-fab";
 import { SiteNavbar } from "@/components/site-navbar";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
+import { RaynaChatbot } from "@/components/rayna-chatbot";
 
 import "./globals.css";
 
@@ -40,8 +40,8 @@ export default function RootLayout({
       >
         <SmoothScrollProvider />
         <SiteNavbar />
-        <HomeFab />
         {children}
+        <RaynaChatbot />
       </body>
     </html>
   );

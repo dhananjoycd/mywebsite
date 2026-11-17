@@ -57,6 +57,7 @@ export async function POST(request: Request) {
     const serviceTitle = normalizeInput(body.serviceTitle);
     const servicePrice = normalizeInput(body.servicePrice);
     const details = normalizeInput(body.details);
+    const paymentMethod = normalizeInput(body.paymentMethod) || "CUSTOM_QUOTE";
     const company = normalizeInput(body.company);
 
     const rawPoints = Array.isArray(body.servicePoints) ? body.servicePoints : [];
@@ -132,7 +133,9 @@ export async function POST(request: Request) {
           serviceTitle,
           servicePrice,
           servicePoints,
-          projectDetails: details || null,
+          projectDetails: details
+            ? `${details}\n\n[Payment Preference: ${paymentMethod}]`
+            : `[Payment Preference: ${paymentMethod}]`,
           status: "PENDING",
         },
       });
